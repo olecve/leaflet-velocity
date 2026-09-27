@@ -12,6 +12,7 @@
   "main": "dist/leaflet-velocity.js",
   "scripts": {
     "build": "webpack --stats-modules --mode production",
+    "check": "npm run fmt:check && npm run lint && npm run test && npm run build",
     "fmt": "prettier --write . && sort-package-json",
     "fmt:check": "prettier --check . && sort-package-json --check",
     "lint": "eslint .",
