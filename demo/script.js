@@ -1,8 +1,9 @@
 var mymap = L.map('mapid').setView([51.505, -0.09], 13);
 
 L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-  maxZoom: 18
+  attribution:
+    'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+  maxZoom: 18,
 }).addTo(mymap);
 
 var velocity = L.velocityLayer({
@@ -19,24 +20,24 @@ var velocity = L.velocityLayer({
   maxVelocity: 10,
   opacity: 1,
   onAdd: null,
-  onRemove: null
+  onRemove: null,
 });
 
 mymap.addLayer(velocity);
 
-function removeWind(){
+function removeWind() {
   mymap.removeLayer(velocity);
 }
 
-function addWind(){
+function addWind() {
   mymap.addLayer(velocity);
 }
 
 setTimeout(function () {
-	velocity.setOptions({
+  velocity.setOptions({
     displayOptions: {
       velocityType: 'GBR Wind',
       speedUnit: 'm/s',
-    }
+    },
   });
 }, 2000);

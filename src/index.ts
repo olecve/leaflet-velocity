@@ -1,11 +1,11 @@
-import L from "leaflet";
+import L from 'leaflet';
 
-import CanvasBound from "./canvasBound";
-import MapBound from "./mapBound";
-import Windy from "./windy";
-import CanvasLayer from "./L.CanvasLayer";
-import VelocityLayer from "./L.VelocityLayer";
-import ControlVelocity from "./L.Control.Velocity";
+import CanvasBound from './canvasBound';
+import MapBound from './mapBound';
+import Windy from './windy';
+import CanvasLayer from './L.CanvasLayer';
+import VelocityLayer from './L.VelocityLayer';
+import ControlVelocity from './L.Control.Velocity';
 
 export { CanvasBound, MapBound, Windy };
 

@@ -1,9 +1,9 @@
-import Vector from "./vector";
-import Grid from "./grid";
-import ColorScale from "./colorScale";
-import Particule from "./particle";
-import AnimationBucket from "./animationBucket";
-import Layer from "./layer";
+import Vector from './vector';
+import Grid from './grid';
+import ColorScale from './colorScale';
+import Particule from './particle';
+import AnimationBucket from './animationBucket';
+import Layer from './layer';
 
 export interface WindyOptions {
   canvas: any;
@@ -19,7 +19,6 @@ export interface WindyOptions {
   opacity: number;
 }
 export default class Windy {
-
   private grid: any;
   private λ0: number;
   private φ0: number;
@@ -44,7 +43,6 @@ export default class Windy {
   private frameTime: number;
   private then = 0;
 
-
   constructor(options: WindyOptions) {
     this.setOptions(options);
     this.canvas = options.canvas;
@@ -60,7 +58,7 @@ export default class Windy {
     this.colorScale = new ColorScale(options.minVelocity || 0, options.maxVelocity || 10, options.colorScale);
     this.velocityScale = options.velocityScale || 0.01;
     this.particleAge = options.particleAge || 64;
-    this.opacity = +options.opacity || 0.97
+    this.opacity = +options.opacity || 0.97;
 
     this.particleMultiplier = options.particleMultiplier || 1 / 300;
     this.particleLineWidth = options.particlelineWidth || 1;
@@ -69,8 +67,15 @@ export default class Windy {
   }
 
   public get particuleCount() {
-    const particuleReduction = ((/android|blackberry|iemobile|ipad|iphone|ipod|opera mini|webos/i).test(navigator.userAgent)) ? (Math.pow(window.devicePixelRatio, 1 / 3) || 1.6) : 1;
-    return Math.round(this.layer.canvasBound.width * this.layer.canvasBound.height * this.particleMultiplier) * particuleReduction;
+    const particuleReduction = /android|blackberry|iemobile|ipad|iphone|ipod|opera mini|webos/i.test(
+      navigator.userAgent,
+    )
+      ? Math.pow(window.devicePixelRatio, 1 / 3) || 1.6
+      : 1;
+    return (
+      Math.round(this.layer.canvasBound.width * this.layer.canvasBound.height * this.particleMultiplier) *
+      particuleReduction
+    );
   }
 
   /**
@@ -82,14 +87,14 @@ export default class Windy {
     let vData: any = null;
     const grid: Vector[] = [];
 
-    data.forEach((record) => {
+    data.forEach(record => {
       switch (`${record.header.parameterCategory},${record.header.parameterNumber}`) {
-        case "1,2":
-        case "2,2":
+        case '1,2':
+        case '2,2':
           uData = record;
           break;
-        case "1,3":
-        case "2,3":
+        case '1,3':
+        case '2,3':
           vData = record;
           break;
         default:
@@ -97,13 +102,13 @@ export default class Windy {
     });
 
     if (!uData || !vData) {
-      console.warn("Data are not correct format");
+      console.warn('Data are not correct format');
       return;
     }
 
     uData.data.forEach((u: number, index: number) => {
       grid.push(new Vector(u, vData.data[index]));
-    })
+    });
 
     //console.log('uData', uData);
     //console.log('vData', vData);
@@ -115,14 +120,14 @@ export default class Windy {
       uData.header.dy,
       uData.header.dx,
       uData.header.ny,
-      uData.header.nx
+      uData.header.nx,
     );
 
     this.λ0 = uData.header.lo1;
     this.φ0 = uData.header.la1;
 
     this.Δλ = uData.header.dx;
-    this.Δφ = uData.header.dy
+    this.Δφ = uData.header.dy;
 
     this.ni = uData.header.nx;
     this.nj = uData.header.ny; // number of grid points W-E and N-S (e.g., 144 x 73)
@@ -149,10 +154,10 @@ export default class Windy {
   }
 
   /* Get interpolated grid value from Lon/Lat position
-* @param λ {Float} Longitude
-* @param φ {Float} Latitude
-* @returns {Object}
-*/
+   * @param λ {Float} Longitude
+   * @param φ {Float} Latitude
+   * @returns {Object}
+   */
   public interpolate(λ: number, φ: number): any {
     if (!this.grid) {
       return null;
@@ -164,7 +169,7 @@ export default class Windy {
     var ci = fi + 1;
     var fj = Math.floor(j);
     var cj = fj + 1;
-    var row = this.grid[fj];//Dont know why he dosent found any row ERRRROR
+    var row = this.grid[fj]; //Dont know why he dosent found any row ERRRROR
     if (row) {
       var g00 = row[fi];
       var g10 = row[ci];
@@ -178,10 +183,10 @@ export default class Windy {
       }
     }
     return null;
-  };
+  }
 
   public start(layer: Layer) {
-    this.context2D = this.canvas.getContext("2d");
+    this.context2D = this.canvas.getContext('2d');
     this.context2D.lineWidth = this.particleLineWidth;
     this.context2D.fillStyle = `rgba(0, 0, 0, ${this.opacity})`;
     this.context2D.globalAlpha = 0.6;
@@ -210,11 +215,11 @@ export default class Windy {
 
   private floorMod(a: number, n: number) {
     return a - n * Math.floor(a / n);
-  };
+  }
 
   private isValue(x: any) {
     return x !== null && x !== undefined;
-  };
+  }
 
   private bilinearInterpolateVector(
     x: number,
@@ -233,7 +238,7 @@ export default class Windy {
     const u = g00.u * a + g10.u * b + g01.u * c + g11.u * d;
     const v = g00.v * a + g10.v * b + g01.v * c + g11.v * d;
     return [u, v, Math.sqrt(u * u + v * v)];
-  };
+  }
 
   private getParticuleWind(p: Particule): Vector {
     const lngLat = this.layer.canvasToMap(p.x, p.y);
@@ -245,11 +250,9 @@ export default class Windy {
     return wind;
   }
 
-
-
   private frame() {
     this.animationLoop = requestAnimationFrame(() => {
-      this.frame()
+      this.frame();
     });
     var now = new Date().getTime();
     var delta = now - this.then;
@@ -273,15 +276,15 @@ export default class Windy {
   }
 
   private draw() {
-    this.context2D.globalCompositeOperation = "destination-in";
+    this.context2D.globalCompositeOperation = 'destination-in';
     this.context2D.fillRect(
       this.layer.canvasBound.xMin,
       this.layer.canvasBound.yMin,
       this.layer.canvasBound.width,
-      this.layer.canvasBound.height
+      this.layer.canvasBound.height,
     );
     // Fade existing particle trails.
-    this.context2D.globalCompositeOperation = "lighter";
+    this.context2D.globalCompositeOperation = 'lighter';
     this.context2D.globalAlpha = this.opacity === 0 ? 0 : this.opacity * 0.9;
 
     this.animationBucket.draw(this.context2D);
