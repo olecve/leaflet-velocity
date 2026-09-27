@@ -4,7 +4,7 @@
   "description": "Visualise velocity layers with leaflet (Typescript fork)",
   "main": "dist/leaflet-velocity.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
     "build": "webpack --stats-modules --mode production",
     "watch": "webpack --progress --watch --mode development"
   },
@@ -21,10 +21,12 @@
   "devDependencies": {
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
     "css-loader": "^7.1.2",
+    "jsdom": "^25.0.0",
     "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
+    "vitest": "^3.1.1",
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1",
     "webpack-node-externals": "^3.0.0"
