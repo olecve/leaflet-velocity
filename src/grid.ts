@@ -55,12 +55,12 @@ export default class Grid {
     const vφ = fφ - iφ; // line variation [0..1]
 
     if (iλ >= 0 && iφ >= 0 && iλ < this.width && iφ < this.height) {
-      let g00 = this.data[iλ + iφ * this.width];
-      let g10 = this.data[jλ + iφ * this.width];
+      const g00 = this.data[iλ + iφ * this.width];
+      const g10 = this.data[jλ + iφ * this.width];
 
       if (this.isValue(g00) && this.isValue(g10)) {
-        let g01 = this.data[iλ + jφ * this.width];
-        let g11 = this.data[jλ + jφ * this.width];
+        const g01 = this.data[iλ + jφ * this.width];
+        const g11 = this.data[jλ + jφ * this.width];
         if (this.isValue(g01) && this.isValue(g11)) {
           return this.interpolation(
             vλ,
@@ -88,14 +88,14 @@ export default class Grid {
    * @return interpolated vector
    */
   interpolation(x: number, y: number, g00: Vector, g10: Vector, g01: Vector, g11: Vector): Vector {
-    var rx = 1 - x;
-    var ry = 1 - y;
-    var a = rx * ry,
+    const rx = 1 - x;
+    const ry = 1 - y;
+    const a = rx * ry,
       b = x * ry,
       c = rx * y,
       d = x * y;
-    var u = g00.u * a + g10.u * b + g01.u * c + g11.u * d;
-    var v = g00.v * a + g10.v * b + g01.v * c + g11.v * d;
+    const u = g00.u * a + g10.u * b + g01.u * c + g11.u * d;
+    const v = g00.v * a + g10.v * b + g01.v * c + g11.v * d;
     return new Vector(u, v);
   }
 

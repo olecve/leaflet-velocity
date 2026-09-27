@@ -67,12 +67,10 @@ export default class VelocityLayer {
     this._paneName = this.options.paneName || 'overlayPane';
 
     // fall back to overlayPane for leaflet < 1
-    let pane = map.getPanes().overlayPane;
     if (map.getPane) {
-      // attempt to get pane first to preserve parent (createPane voids this)
-      pane = map.getPane(this._paneName);
-      if (!pane) {
-        pane = map.createPane(this._paneName);
+      // ensure the pane exists (attempt to get it first to preserve parent - createPane voids this)
+      if (!map.getPane(this._paneName)) {
+        map.createPane(this._paneName);
       }
     }
     // create canvas, add overlay control
@@ -84,7 +82,7 @@ export default class VelocityLayer {
     if (this.options.onAdd) this.options.onAdd();
   }
 
-  onRemove(map: any) {
+  onRemove(_map: any) {
     this.destroyWind();
 
     if (this.options.onRemove) this.options.onRemove();
@@ -139,8 +137,8 @@ export default class VelocityLayer {
       };
     }
 
-    for (let e in this._mapEvents) {
-      if (this._mapEvents.hasOwnProperty(e)) {
+    for (const e in this._mapEvents) {
+      if (Object.prototype.hasOwnProperty.call(this._mapEvents, e)) {
         this._map[bind ? 'on' : 'off'](e, this._mapEvents[e]);
       }
     }
@@ -179,8 +177,8 @@ export default class VelocityLayer {
   }
 
   private startWindy() {
-    var bounds = this._map.getBounds();
-    var size = this._map.getSize();
+    const bounds = this._map.getBounds();
+    const size = this._map.getSize();
 
     // bounds, width, height, extent
     this._windy.start(

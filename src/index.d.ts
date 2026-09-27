@@ -24,8 +24,8 @@ export interface VelocityOptions {
   velocityScale: number;
   colorScale: string[];
   opacity: number;
-  onAdd: Function;
-  onRemove: Function;
+  onAdd: () => void;
+  onRemove: () => void;
 }
 
 export function velocityLayer(options: VelocityOptions): L.Layer;
