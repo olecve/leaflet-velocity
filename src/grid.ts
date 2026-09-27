@@ -112,7 +112,7 @@ export default class Grid {
    * Detect if x is a value
    * @returns {boolean} true if the specified value is not null and not undefined.
    */
-  isValue(x: any): boolean {
+  isValue(x: unknown): boolean {
     return x !== null && x !== undefined;
   }
 }
