@@ -216,12 +216,22 @@ export default class Windy {
     return x !== null && x !== undefined;
   };
 
-  private bilinearInterpolateVector(x: number, y: number, g00: any, g10: any, g01: any, g11: any) {
-    var rx = (1 - x);
-    var ry = (1 - y);
-    var a = rx * ry, b = x * ry, c = rx * y, d = x * y;
-    var u = g00.u * a + g10.u * b + g01.u * c + g11.u * d;
-    var v = g00.v * a + g10.v * b + g01.v * c + g11.v * d;
+  private bilinearInterpolateVector(
+    x: number,
+    y: number,
+    g00: { u: number; v: number },
+    g10: { u: number; v: number },
+    g01: { u: number; v: number },
+    g11: { u: number; v: number },
+  ): [number, number, number] {
+    const rx = 1 - x;
+    const ry = 1 - y;
+    const a = rx * ry;
+    const b = x * ry;
+    const c = rx * y;
+    const d = x * y;
+    const u = g00.u * a + g10.u * b + g01.u * c + g11.u * d;
+    const v = g00.v * a + g10.v * b + g01.v * c + g11.v * d;
     return [u, v, Math.sqrt(u * u + v * v)];
   };
 
