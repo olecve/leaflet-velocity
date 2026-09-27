@@ -6,7 +6,9 @@
   "scripts": {
     "test": "vitest run",
     "build": "webpack --stats-modules --mode production",
-    "watch": "webpack --progress --watch --mode development"
+    "watch": "webpack --progress --watch --mode development",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check ."
   },
   "author": "Dan Wild <danwild@y7mail.com>",
   "contributors": [
@@ -19,6 +21,7 @@
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
     "css-loader": "^7.1.2",
     "jsdom": "^25.0.0",
+    "prettier": "3.9.9",
     "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.2",
