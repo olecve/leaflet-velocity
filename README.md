@@ -1,17 +1,26 @@
 # @olecve/leaflet-velocity
 
-This is a typescript updated version of [leaflet-velocity](https://github.com/danwild/leaflet-velocity)
+This is a typescript updated version of [leaflet-velocity](https://github.com/danwild/leaflet-velocity), forked from
+[leaflet-velocity-ts](https://github.com/0nza1101/leaflet-velocity-ts).
 
-### Compared to the other version :
+### Compared to the other versions:
 
-- This version is compatible with the latest version of leaflet.
-- This version adds a better particles management when zooming and moving the map which gives better performance on
-  mobile devices.
-- This version does not need leaflet-velocity.css to be included.
+- Compatible with the latest version of leaflet.
+- Better particle management when zooming and moving the map, for better performance on mobile devices.
+- Extends the Leaflet module you `import`, not a global `window.L`. The original plugin (and earlier versions of this
+  fork) assumed a single global `L`, set by loading `leaflet.js` via a `<script>` tag before this plugin's own script —
+  an assumption that breaks under a bundler, where more than one copy of Leaflet can exist on the same page.
+- Real ESM + generated TypeScript declarations (`tsc`, `declaration: true`) — the original never shipped working types
+  for consumers.
+- The control's stylesheet (`src/leaflet-velocity.css`) is no longer auto-injected — import it explicitly (see below).
 
 ## Example use:
 
 ```javascript
+import '@olecve/leaflet-velocity';
+import '@olecve/leaflet-velocity/src/leaflet-velocity.css'; // only needed if displayValues is enabled
+import L from 'leaflet';
+
 const velocityLayer = L.velocityLayer({
   displayValues: true,
   displayOptions: {

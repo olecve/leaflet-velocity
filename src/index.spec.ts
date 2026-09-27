@@ -9,9 +9,7 @@ declare global {
 
 describe('index side effects', () => {
   it('extends the imported Leaflet module directly, even when a different Leaflet-like object owns window.L', async () => {
-    // Simulates a host page whose own, separately-bundled Leaflet instance is
-    // sitting in the global slot — the exact situation that broke the
-    // original plugin, which patched window.L instead of an imported module.
+    // Simulates a host page's own, separately-bundled Leaflet instance sitting in the global slot.
     const hostLeaflet = { ...L };
     window.L = hostLeaflet;
 

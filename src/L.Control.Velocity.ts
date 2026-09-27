@@ -1,23 +1,13 @@
 import L from 'leaflet';
 
 import Windy from './windy';
+import { VelocityDisplayOptions } from './types';
 
 // Ship src/leaflet-velocity.css as a plain stylesheet for consumers to import themselves.
 const LEAFLET_VELOCITY_CONTROL_CLASS = 'leaflet-velocity-control';
 
-interface DisplayOptions {
-  speedUnit: 'kt' | 'k/h' | 'mph' | 'm/s';
-  position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
-  showCardinal: boolean;
-  angleConvention: string;
-  velocityType: string;
-  emptyString: string;
-  directionString: string;
-  speedString: string;
-}
-
 export default class ControlVelocity {
-  private options: DisplayOptions;
+  private options: VelocityDisplayOptions;
   private _windy: Windy = null;
   private _map: any = null;
   private _container: any = null;
@@ -39,7 +29,7 @@ export default class ControlVelocity {
     if (!this._windy && _windy) this._windy = _windy;
   }
 
-  setOptions(options: any) {
+  setOptions(options: Partial<VelocityDisplayOptions>) {
     L.Util.setOptions(this, options);
   }
 

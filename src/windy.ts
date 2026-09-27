@@ -7,16 +7,16 @@ import Layer from './layer';
 
 export interface WindyOptions {
   canvas: any;
-  data: any;
-  colorScale: string[];
-  maxVelocity: number;
-  minVelocity: number;
-  velocityScale: number;
-  particleAge: number;
-  particleMultiplier: number;
-  particlelineWidth: number;
-  frameRate: number;
-  opacity: number;
+  data?: any;
+  colorScale?: string[];
+  maxVelocity?: number;
+  minVelocity?: number;
+  velocityScale?: number;
+  particleAge?: number;
+  particleMultiplier?: number;
+  particlelineWidth?: number;
+  frameRate?: number;
+  opacity?: number;
 }
 export default class Windy {
   private grid: any;
@@ -51,7 +51,7 @@ export default class Windy {
     }
   }
 
-  public setOptions(options: WindyOptions) {
+  public setOptions(options: Omit<WindyOptions, 'canvas'>) {
     if (options.minVelocity === undefined && options.maxVelocity === undefined) {
       this.autoColorRange = true;
     }

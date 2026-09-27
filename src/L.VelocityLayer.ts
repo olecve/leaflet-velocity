@@ -5,9 +5,10 @@ import CanvasBound from './canvasBound';
 import MapBound from './mapBound';
 import Layer from './layer';
 import CanvasLayer from './L.CanvasLayer';
+import { VelocityOptions } from './types';
 
 export default class VelocityLayer {
-  private options: any;
+  private options: Partial<VelocityOptions>;
   private _map: L.Map = null;
   private _canvasLayer: CanvasLayer & L.Layer = null;
   private _windy: Windy = null;
@@ -36,11 +37,11 @@ export default class VelocityLayer {
     };
   }
 
-  initialize(options: any) {
+  initialize(options: Partial<VelocityOptions>) {
     L.Util.setOptions(this, options);
   }
 
-  setOptions(options: any) {
+  setOptions(options: Partial<VelocityOptions>) {
     this.options = { ...this.options, ...options };
     if (options.displayOptions) {
       this.options.displayOptions = { ...this.options.displayOptions, ...options.displayOptions };
@@ -54,7 +55,7 @@ export default class VelocityLayer {
     if (this._windy) {
       this._windy.setOptions(options);
       if (options.data) {
-        this._windy.setData(options.data);
+        this._windy.setData(options.data as any[]);
       }
       this.clearAndRestart();
     }
@@ -74,7 +75,7 @@ export default class VelocityLayer {
       }
     }
     // create canvas, add overlay control
-    this._canvasLayer = (L as any).canvasLayer().delegate(this);
+    this._canvasLayer = L.canvasLayer().delegate(this) as CanvasLayer & L.Layer;
     this._canvasLayer.addTo(map);
 
     this._map = map;
@@ -169,7 +170,7 @@ export default class VelocityLayer {
 
     if (!this._mouseControl && this.options.displayValues) {
       const options = this.options.displayOptions || {};
-      this._mouseControl = (L as any).control.velocity(options);
+      this._mouseControl = L.control.velocity(options);
       this._mouseControl.setWindy(this._windy);
       this._mouseControl.setOptions(this.options.displayOptions);
       this._mouseControl.addTo(this._map);
