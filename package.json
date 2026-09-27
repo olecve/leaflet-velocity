@@ -9,38 +9,37 @@
     "Jordan N. <me@0nza.dev>",
     "Oleg Tsvetkov <olecve@gmail.com>"
   ],
-  "main": "dist/leaflet-velocity.js",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/leaflet-velocity.css"
+  ],
   "scripts": {
-    "build": "webpack --stats-modules --mode production",
+    "build": "tsc",
     "check": "npm run fmt:check && npm run lint && npm run test && npm run build",
     "fmt": "prettier --write . && sort-package-json",
     "fmt:check": "prettier --check . && sort-package-json --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "watch": "webpack --progress --watch --mode development"
-  },
-  "dependencies": {
-    "@types/leaflet": "^1.9.19",
-    "leaflet": "1.9.4"
+    "watch": "tsc --watch"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
-    "css-loader": "^7.1.2",
+    "@types/leaflet": "^1.9.19",
     "eslint": "10.11.0",
     "globals": "17.12.0",
     "jsdom": "^25.0.0",
+    "leaflet": "1.9.4",
     "prettier": "3.9.9",
-    "sass-loader": "^16.0.5",
     "sort-package-json": "4.0.0",
-    "style-loader": "^4.0.0",
-    "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "8.70.1",
-    "vitest": "^3.1.1",
-    "webpack": "^5.99.9",
-    "webpack-cli": "^6.0.1",
-    "webpack-node-externals": "^3.0.0"
+    "vitest": "^3.1.1"
+  },
+  "peerDependencies": {
+    "leaflet": ">=1.0.0"
   }
 }

@@ -1,21 +1,13 @@
 import L from 'leaflet';
 
 import Windy from './windy';
-import velocitycss from './leaflet-velocity.css';
+import { VelocityDisplayOptions } from './types';
 
-interface DisplayOptions {
-  speedUnit: 'kt' | 'k/h' | 'mph' | 'm/s';
-  position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
-  showCardinal: boolean;
-  angleConvention: string;
-  velocityType: string;
-  emptyString: string;
-  directionString: string;
-  speedString: string;
-}
+// Ship src/leaflet-velocity.css as a plain stylesheet for consumers to import themselves.
+const LEAFLET_VELOCITY_CONTROL_CLASS = 'leaflet-velocity-control';
 
 export default class ControlVelocity {
-  private options: DisplayOptions;
+  private options: VelocityDisplayOptions;
   private _windy: Windy = null;
   private _map: any = null;
   private _container: any = null;
@@ -37,13 +29,13 @@ export default class ControlVelocity {
     if (!this._windy && _windy) this._windy = _windy;
   }
 
-  setOptions(options: any) {
+  setOptions(options: Partial<VelocityDisplayOptions>) {
     L.Util.setOptions(this, options);
   }
 
   onAdd(map: any) {
     this._map = map;
-    this._container = L.DomUtil.create('div', velocitycss.leafletControlVelocity);
+    this._container = L.DomUtil.create('div', LEAFLET_VELOCITY_CONTROL_CLASS);
     L.DomEvent.disableClickPropagation(this._container);
     this._map.on('mousemove', this.drawWindSpeed, this);
     this._container.innerHTML = this.options.emptyString;
