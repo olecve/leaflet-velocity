@@ -22,7 +22,7 @@ export default class AnimationBucket {
   add(p: Particule, v: Vector) {
     const index = this.colorScale.getColorIndex(p.intensity);
     if (index < 0 || index >= this.buckets.length) {
-      console.log(index);
+      console.warn(`Color index ${index} out of range`);
       return;
     }
     p.xt = p.x + v.u;
@@ -30,7 +30,7 @@ export default class AnimationBucket {
     this.buckets[index].push(p);
   }
 
-  draw(context2D: any) {
+  draw(context2D: CanvasRenderingContext2D) {
     this.buckets.forEach((bucket: Particule[], i: number) => {
       if (bucket.length > 0) {
         context2D.beginPath();

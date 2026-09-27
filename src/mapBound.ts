@@ -1,3 +1,5 @@
+import L from 'leaflet';
+
 export default class MapBound {
   public _map: L.Map;
   public south: number;
@@ -14,11 +16,11 @@ export default class MapBound {
   }
 
   get width(): number {
-    return (720 + this.east - this.west) % 360;
+    return this.east - this.west;
   }
 
   get height(): number {
-    return (360 + this.north - this.south) % 180;
+    return this.north - this.south;
   }
 
   get map(): L.Map {
