@@ -132,12 +132,12 @@ export default class Windy {
     this.ni = uData.header.nx;
     this.nj = uData.header.ny; // number of grid points W-E and N-S (e.g., 144 x 73)
 
-    var p = 0;
-    var isContinuous = Math.floor(this.ni * this.Δλ) >= 360;
+    let p = 0;
+    const isContinuous = Math.floor(this.ni * this.Δλ) >= 360;
 
-    for (var j = 0; j < this.nj; j++) {
-      var row = [];
-      for (var i = 0; i < this.ni; i++, p++) {
+    for (let j = 0; j < this.nj; j++) {
+      const row = [];
+      for (let i = 0; i < this.ni; i++, p++) {
         row[i] = this.grid.data[p];
       }
       if (isContinuous) {
@@ -162,20 +162,20 @@ export default class Windy {
     if (!this.grid) {
       return null;
     }
-    var i = this.floorMod(λ - this.λ0, 360) / this.Δλ; // calculate longitude index in wrapped range [0, 360)
-    var j = (this.φ0 - φ) / this.Δφ; // calculate latitude index in direction +90 to -90
+    const i = this.floorMod(λ - this.λ0, 360) / this.Δλ; // calculate longitude index in wrapped range [0, 360)
+    const j = (this.φ0 - φ) / this.Δφ; // calculate latitude index in direction +90 to -90
 
-    var fi = Math.floor(i);
-    var ci = fi + 1;
-    var fj = Math.floor(j);
-    var cj = fj + 1;
-    var row = this.grid[fj]; //Dont know why he dosent found any row ERRRROR
+    const fi = Math.floor(i);
+    const ci = fi + 1;
+    const fj = Math.floor(j);
+    const cj = fj + 1;
+    let row = this.grid[fj]; //Dont know why he dosent found any row ERRRROR
     if (row) {
-      var g00 = row[fi];
-      var g10 = row[ci];
+      const g00 = row[fi];
+      const g10 = row[ci];
       if (this.isValue(g00) && this.isValue(g10) && (row = this.grid[cj])) {
-        var g01 = row[fi];
-        var g11 = row[ci];
+        const g01 = row[fi];
+        const g11 = row[ci];
         if (this.isValue(g01) && this.isValue(g11)) {
           // All four points found, so interpolate the value.
           return this.bilinearInterpolateVector(i - fi, j - fj, g00, g10, g01, g11);
@@ -245,7 +245,7 @@ export default class Windy {
     const wind = this.grid.get(lngLat[0], lngLat[1]);
     p.intensity = wind.intensity;
     const mapArea = this.layer.mapBound.height * this.layer.mapBound.width;
-    var velocityScale = this.velocityScale * Math.pow(mapArea, 0.4);
+    const velocityScale = this.velocityScale * Math.pow(mapArea, 0.4);
     this.layer.distort(lngLat[0], lngLat[1], p.x, p.y, velocityScale, wind);
     return wind;
   }
@@ -254,8 +254,8 @@ export default class Windy {
     this.animationLoop = requestAnimationFrame(() => {
       this.frame();
     });
-    var now = new Date().getTime();
-    var delta = now - this.then;
+    const now = new Date().getTime();
+    const delta = now - this.then;
     if (delta > this.frameTime) {
       this.then = now - (delta % this.frameTime);
       this.evolve();

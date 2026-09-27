@@ -50,12 +50,12 @@ export default class ControlVelocity {
     return this._container;
   }
 
-  onRemove(map: any) {
+  onRemove(_map: any) {
     this._map.off('mousemove', this.drawWindSpeed, this);
   }
 
   vectorToSpeed(uMs: number, vMs: number, unit: string) {
-    var velocityAbs = Math.sqrt(Math.pow(uMs, 2) + Math.pow(vMs, 2));
+    const velocityAbs = Math.sqrt(Math.pow(uMs, 2) + Math.pow(vMs, 2));
     // Default is m/s
     if (unit === 'k/h') {
       return this.meterSec2kilometerHour(velocityAbs);
@@ -72,12 +72,12 @@ export default class ControlVelocity {
     // Default angle convention is CW
     if (angleConvention.endsWith('CCW')) {
       // vMs comes out upside-down..
-      vMs = vMs > 0 ? (vMs = -vMs) : Math.abs(vMs);
+      vMs = vMs > 0 ? -vMs : Math.abs(vMs);
     }
-    var velocityAbs = Math.sqrt(Math.pow(uMs, 2) + Math.pow(vMs, 2));
+    const velocityAbs = Math.sqrt(Math.pow(uMs, 2) + Math.pow(vMs, 2));
 
-    var velocityDir = Math.atan2(uMs / velocityAbs, vMs / velocityAbs);
-    var velocityDirToDegrees = (velocityDir * 180) / Math.PI + 180;
+    const velocityDir = Math.atan2(uMs / velocityAbs, vMs / velocityAbs);
+    let velocityDirToDegrees = (velocityDir * 180) / Math.PI + 180;
 
     if (angleConvention === 'bearingCW' || angleConvention === 'meteoCCW') {
       velocityDirToDegrees += 180;
@@ -141,7 +141,7 @@ export default class ControlVelocity {
   drawWindSpeed(ev: any) {
     const pos = this._map.containerPointToLatLng(L.point(ev.containerPoint.x, ev.containerPoint.y));
     const gridValue = this._windy.interpolate(pos.lng, pos.lat);
-    var template = '';
+    let template = '';
     if (gridValue && !isNaN(gridValue[0]) && !isNaN(gridValue[1]) && gridValue[2]) {
       const deg = this.vectorToDegrees(gridValue[0], gridValue[1], this.options.angleConvention);
       const cardinal = this.options.showCardinal ? ` (${this.degreesToCardinalDirection(deg)}) ` : '';

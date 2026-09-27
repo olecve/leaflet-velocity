@@ -3,7 +3,7 @@ import L, { Layer, ZoomAnimEvent } from 'leaflet';
 // -- L.DomUtil.setTransform from leaflet 1.0.0 to work on 0.0.7
 if (!L.DomUtil.setTransform) {
   L.DomUtil.setTransform = (el: any, offset: any, scale: any) => {
-    var pos = offset || new L.Point(0, 0);
+    const pos = offset || new L.Point(0, 0);
 
     el.style[L.DomUtil.TRANSFORM] =
       (L.Browser.ie3d
@@ -69,7 +69,7 @@ export default class CanvasLayer {
     map.on(this.getEvents() as any, this as any);
 
     const del = this._del || this;
-    del.onLayerDidMount && del.onLayerDidMount(); // -- callback
+    if (del.onLayerDidMount) del.onLayerDidMount(); // -- callback
     this.needRedraw();
 
     setTimeout(() => {
@@ -79,7 +79,7 @@ export default class CanvasLayer {
 
   public onRemove(map: L.Map) {
     const del = this._del || this;
-    del.onLayerWillUnmount && del.onLayerWillUnmount(); // -- callback
+    if (del.onLayerWillUnmount) del.onLayerWillUnmount(); // -- callback
 
     map.getPanes().overlayPane.removeChild(this._canvas);
 
@@ -103,7 +103,7 @@ export default class CanvasLayer {
     const corner = this._map.options.crs.project(this._map.containerPointToLatLng(this._map.getSize()));
 
     const del = this._del || this;
-    del.onDrawLayer &&
+    if (del.onDrawLayer)
       del.onDrawLayer({
         layer: this,
         canvas: this._canvas,
@@ -119,7 +119,7 @@ export default class CanvasLayer {
   // -- L.DomUtil.setTransform from leaflet 1.0.0 to work on 0.0.7
   //------------------------------------------------------------------------------
   _setTransform(el: any, offset: any, scale: any) {
-    var pos = offset || new L.Point(0, 0);
+    const pos = offset || new L.Point(0, 0);
 
     el.style[L.DomUtil.TRANSFORM] =
       (L.Browser.ie3d
@@ -146,7 +146,7 @@ export default class CanvasLayer {
   }
 
   private onLayerDidMove() {
-    var topLeft = this._map.containerPointToLayerPoint([0, 0]);
+    const topLeft = this._map.containerPointToLayerPoint([0, 0]);
     L.DomUtil.setPosition(this._canvas, topLeft);
     this.drawLayer();
   }
