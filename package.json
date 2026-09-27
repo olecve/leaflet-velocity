@@ -7,8 +7,8 @@
     "test": "vitest run",
     "build": "webpack --stats-modules --mode production",
     "watch": "webpack --progress --watch --mode development",
-    "fmt": "prettier --write .",
-    "fmt:check": "prettier --check ."
+    "fmt": "prettier --write . && sort-package-json",
+    "fmt:check": "prettier --check . && sort-package-json --check"
   },
   "author": "Dan Wild <danwild@y7mail.com>",
   "contributors": [
@@ -23,6 +23,7 @@
     "jsdom": "^25.0.0",
     "prettier": "3.9.9",
     "sass-loader": "^16.0.5",
+    "sort-package-json": "4.0.0",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
