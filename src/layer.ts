@@ -2,8 +2,6 @@ import MapBound from "./mapBound";
 import CanvasBound from "./canvasBound";
 import Vector from "./vector";
 
-declare var L: any;
-
 export default class layer {
 
     public mapBound: MapBound;

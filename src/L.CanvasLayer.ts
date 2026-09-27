@@ -1,6 +1,4 @@
-import { Layer, ZoomAnimEvent } from "leaflet";
-
-declare var L: any;
+import L, { Layer, ZoomAnimEvent } from "leaflet";
 
 // -- L.DomUtil.setTransform from leaflet 1.0.0 to work on 0.0.7
 if (!L.DomUtil.setTransform) {

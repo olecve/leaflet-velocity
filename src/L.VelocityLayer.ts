@@ -1,10 +1,10 @@
+import L from "leaflet";
+
 import Windy, { WindyOptions } from './windy';
 import CanvasBound from './canvasBound'
 import MapBound from './mapBound';
 import Layer from "./layer";
 import CanvasLayer from './L.CanvasLayer';
-
-declare var L: any;
 
 export default class VelocityLayer {
   private options: any;
@@ -76,7 +76,7 @@ export default class VelocityLayer {
       }
     }
     // create canvas, add overlay control
-    this._canvasLayer = L.canvasLayer().delegate(this);
+    this._canvasLayer = (L as any).canvasLayer().delegate(this);
     this._canvasLayer.addTo(map);
 
     this._map = map;
@@ -174,7 +174,7 @@ export default class VelocityLayer {
 
     if (!this._mouseControl && this.options.displayValues) {
       const options = this.options.displayOptions || {};
-      this._mouseControl = L.control.velocity(options);
+      this._mouseControl = (L as any).control.velocity(options);
       this._mouseControl.setWindy(this._windy);
       this._mouseControl.setOptions(this.options.displayOptions);
       this._mouseControl.addTo(this._map);

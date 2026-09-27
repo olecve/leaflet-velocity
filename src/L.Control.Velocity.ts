@@ -1,5 +1,6 @@
+import L from "leaflet";
+
 import Windy from './windy';
-declare var L: any;
 import velocitycss from './leaflet-velocity.css';
 
 interface DisplayOptions {
