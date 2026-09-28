@@ -49,7 +49,7 @@ const velocityLayer = L.velocityLayer({
     // or 'CCW' (angle value increases counter clock-wise)
     angleConvention: 'bearingCW',
   },
-  // see demo/*.json, or wind-js-server for example data service
+  // see demo/data.js, or wind-js-server for example data service
   data: data,
 
   // OPTIONAL
