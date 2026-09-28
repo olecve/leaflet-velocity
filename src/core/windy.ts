@@ -15,7 +15,7 @@ export interface WindyOptions {
   velocityScale?: number;
   particleAge?: number;
   particleMultiplier?: number;
-  particlelineWidth?: number;
+  particleLineWidth?: number;
   frameRate?: number;
   opacity?: number;
 }
@@ -65,7 +65,7 @@ export default class Windy {
     this.opacity = +options.opacity || 0.97;
 
     this.particleMultiplier = options.particleMultiplier || 1 / 300;
-    this.particleLineWidth = options.particlelineWidth || 1;
+    this.particleLineWidth = options.particleLineWidth || 1;
     const frameRate = options.frameRate || 15;
     this.frameTime = 1000 / frameRate;
   }
