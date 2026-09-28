@@ -25,6 +25,10 @@
 - [x] Add a round-trip test for `layer.ts`'s projection math (`mapToCanvas` then `canvasToMap`, plus the edge mappings).
       `distortion`/`distort` still have no dedicated test — a finite-difference approximation that's harder to pin down
       a correct expected value for without more care
+- [x] Add tests for real gaps found while reviewing for edge cases: `Windy.setData` with a missing wind component,
+      `Windy.interpolate` before any data loads, and `vectorToSpeed`/`degreesToCardinalDirection` (previously untested).
+      Skipped several "corner case" candidates (zero/equal-value inputs on `Vector`, `Particle`, `CanvasBound`,
+      `ColorScale`, `MapBound`) after checking they don't exercise any code path the existing tests don't already cover
 
 ## Remaining test coverage
 
