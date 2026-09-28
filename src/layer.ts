@@ -1,6 +1,6 @@
-import MapBound from './mapBound';
-import CanvasBound from './canvasBound';
-import Vector from './vector';
+import MapBound from './mapBound.js';
+import CanvasBound from './canvasBound.js';
+import Vector from './vector.js';
 
 export default class layer {
   public mapBound: MapBound;

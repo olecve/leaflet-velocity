@@ -1,4 +1,4 @@
-import Particule from './particle';
+import Particule from './particle.js';
 
 export default class CanvasBound {
   public xMin: number;

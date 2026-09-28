@@ -1,6 +1,6 @@
-import ColorScale from './colorScale';
-import Particule from './particle';
-import Vector from './vector';
+import ColorScale from './colorScale.js';
+import Particule from './particle.js';
+import Vector from './vector.js';
 
 export default class AnimationBucket {
   private colorScale: ColorScale;

@@ -1,12 +1,12 @@
 import L from 'leaflet';
 
-import CanvasBound from './canvasBound';
-import MapBound from './mapBound';
-import Windy from './windy';
-import CanvasLayer from './L.CanvasLayer';
-import VelocityLayer from './L.VelocityLayer';
-import ControlVelocity from './L.Control.Velocity';
-import { Position, SpeedUnit, VelocityDisplayOptions, VelocityOptions } from './types';
+import CanvasBound from './canvasBound.js';
+import MapBound from './mapBound.js';
+import Windy from './windy.js';
+import CanvasLayer from './L.CanvasLayer.js';
+import VelocityLayer from './L.VelocityLayer.js';
+import ControlVelocity from './L.Control.Velocity.js';
+import { Position, SpeedUnit, VelocityDisplayOptions, VelocityOptions } from './types.js';
 
 export { CanvasBound, MapBound, Windy };
 export type { Position, SpeedUnit, VelocityDisplayOptions, VelocityOptions };

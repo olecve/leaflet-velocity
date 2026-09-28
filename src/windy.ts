@@ -1,9 +1,9 @@
-import Vector from './vector';
-import Grid from './grid';
-import ColorScale from './colorScale';
-import Particule from './particle';
-import AnimationBucket from './animationBucket';
-import Layer from './layer';
+import Vector from './vector.js';
+import Grid from './grid.js';
+import ColorScale from './colorScale.js';
+import Particule from './particle.js';
+import AnimationBucket from './animationBucket.js';
+import Layer from './layer.js';
 
 export interface WindyOptions {
   canvas: any;

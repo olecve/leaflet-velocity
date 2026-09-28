@@ -3,8 +3,8 @@
     // Must stay ES5 — Leaflet's Class.extend() mixin needs enumerable prototype methods; native classes aren't.
     "target": "ES5",
     "lib": ["ES2020", "DOM"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

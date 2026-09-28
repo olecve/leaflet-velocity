@@ -1,4 +1,4 @@
-import Vector from './vector';
+import Vector from './vector.js';
 
 export default class Grid {
   private data: Vector[];

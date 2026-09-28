@@ -1,11 +1,11 @@
 import L from 'leaflet';
 
-import Windy, { WindyOptions } from './windy';
-import CanvasBound from './canvasBound';
-import MapBound from './mapBound';
-import Layer from './layer';
-import CanvasLayer from './L.CanvasLayer';
-import { VelocityOptions } from './types';
+import Windy, { WindyOptions } from './windy.js';
+import CanvasBound from './canvasBound.js';
+import MapBound from './mapBound.js';
+import Layer from './layer.js';
+import CanvasLayer from './L.CanvasLayer.js';
+import { VelocityOptions } from './types.js';
 
 export default class VelocityLayer {
   private options: Partial<VelocityOptions>;
