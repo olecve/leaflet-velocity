@@ -29,6 +29,8 @@
       `Windy.interpolate` before any data loads, and `vectorToSpeed`/`degreesToCardinalDirection` (previously untested).
       Skipped several "corner case" candidates (zero/equal-value inputs on `Vector`, `Particle`, `CanvasBound`,
       `ColorScale`, `MapBound`) after checking they don't exercise any code path the existing tests don't already cover
+- [x] Upgrade to `vitest@5`. This fixes the `@vitest/mocker` vulnerability. No code changes were needed — all 50 tests
+      passed unchanged across the jump from `3.1.1`, skipping the whole `4.x` line
 
 ## Remaining test coverage
 
@@ -38,5 +40,3 @@
 ## On hold
 
 - [ ] Decide where to host this repo: GitHub, GitLab, or local only. This decision is on hold. Revisit it when ready
-- [ ] Fix the moderate `npm audit` vulnerability in `@vitest/mocker`. It affects only a dev dependency. The fix needs a
-      breaking upgrade to `vitest@5`
