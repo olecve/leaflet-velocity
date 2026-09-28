@@ -2,21 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Simple-leaflet</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <title>@olecve/leaflet-velocity demo</title>
     <link rel="stylesheet" href="style.css" />
-
-    <script src="data.js"></script>
-    <script src="wind-gbr.js"></script>
-
-    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
-    <script src="../dist/leaflet-velocity.js"></script>
   </head>
 
   <body>
     <div id="mapid"></div>
-    <button onclick="removeWind()">Remove Wind</button>
-    <button onclick="addWind()">Add Wind</button>
-    <script src="script.js"></script>
+    <button id="remove">Remove Wind</button>
+    <button id="add">Add Wind</button>
+    <script type="module" src="main.ts"></script>
   </body>
 </html>

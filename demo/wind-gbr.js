@@ -101,3 +101,5 @@ var windGbr = [
     ],
   },
 ];
+
+export default windGbr;

@@ -19,6 +19,7 @@
   "scripts": {
     "build": "tsc",
     "check": "npm run fmt:check && npm run lint && npm run test && npm run build",
+    "demo": "vite",
     "fmt": "prettier --write . && sort-package-json",
     "fmt:check": "prettier --check . && sort-package-json --check",
     "lint": "eslint .",
@@ -37,6 +38,7 @@
     "sort-package-json": "4.0.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "8.70.1",
+    "vite": "7.3.6",
     "vitest": "^3.1.1"
   },
   "peerDependencies": {

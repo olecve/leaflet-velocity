@@ -1,0 +1,32 @@
+import '../src/index';
+import '../src/leaflet-velocity.css';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+import data from './data.js';
+
+const map = L.map('mapid').setView([51.505, -0.09], 3);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 18,
+}).addTo(map);
+
+const velocity = L.velocityLayer({
+  displayValues: true,
+  displayOptions: {
+    position: 'bottomleft',
+    emptyString: 'No velocity data',
+    angleConvention: 'bearingCW',
+    speedUnit: 'kt',
+    showCardinal: true,
+  },
+  data,
+  maxVelocity: 10,
+  opacity: 1,
+});
+
+map.addLayer(velocity);
+
+document.getElementById('remove')!.addEventListener('click', () => map.removeLayer(velocity));
+document.getElementById('add')!.addEventListener('click', () => map.addLayer(velocity));
