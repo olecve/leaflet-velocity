@@ -28,11 +28,8 @@ export interface WindDataRecord {
   data: number[];
 }
 
-export interface VelocityOptions {
-  displayValues: boolean;
-  displayOptions: Partial<VelocityDisplayOptions>;
-  data: WindDataRecord[]; // see demo/data.js, or wind-js-server for example data service
-  // OPTIONAL
+export interface WindySimulationOptions {
+  data: WindDataRecord[];
   particleAge: number;
   particleMultiplier: number;
   particleLineWidth: number;
@@ -42,6 +39,11 @@ export interface VelocityOptions {
   velocityScale: number;
   colorScale: string[];
   opacity: number;
+}
+
+export interface VelocityOptions extends WindySimulationOptions {
+  displayValues: boolean;
+  displayOptions: Partial<VelocityDisplayOptions>;
   onAdd: () => void;
   onRemove: () => void;
   paneName: string;

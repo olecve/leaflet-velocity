@@ -4,21 +4,11 @@ import ColorScale from './colorScale.js';
 import Particule from './particle.js';
 import AnimationBucket from './animationBucket.js';
 import Layer from './layer.js';
-import { WindDataRecord } from '../types.js';
+import { WindDataRecord, WindySimulationOptions } from '../types.js';
 
-export interface WindyOptions {
+export type WindyOptions = Partial<WindySimulationOptions> & {
   canvas: HTMLCanvasElement;
-  data?: WindDataRecord[];
-  colorScale?: string[];
-  maxVelocity?: number;
-  minVelocity?: number;
-  velocityScale?: number;
-  particleAge?: number;
-  particleMultiplier?: number;
-  particleLineWidth?: number;
-  frameRate?: number;
-  opacity?: number;
-}
+};
 export default class Windy {
   // Grid is also (ab)used as an array-like bag of rows (this.grid[j] = row, read back in interpolate()),
   // bypassing Grid's own public API and its private `data` field. Left as `any` rather than typed as
