@@ -18,8 +18,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "check": "npm run fmt:check && npm run lint && npm run test && npm run build",
-    "demo": "vite",
+    "check": "npm run fmt:check && npm run lint && npm run build && npm run test",
+    "demo": "npm run build && vite",
     "fmt": "prettier --write . && sort-package-json",
     "fmt:check": "prettier --check . && sort-package-json --check",
     "lint": "eslint .",

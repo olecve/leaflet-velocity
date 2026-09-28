@@ -1,11 +1,12 @@
-import '../src/index';
+import '../dist/index.js';
 import '../src/leaflet-velocity.css';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import data from './data.js';
 
-const map = L.map('mapid').setView([51.505, -0.09], 3);
+// Centered on the strongest wind in this dataset (~32 m/s near 20°N 130°E) so the animation is obvious immediately.
+const map = L.map('mapid').setView([20, 130], 4);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

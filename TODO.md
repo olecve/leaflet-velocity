@@ -17,6 +17,9 @@
 - [x] Fix `MapBound.width` and `MapBound.height`. The old wraparound formula was wrong for radian values
 - [x] Add tests for `ColorScale` and `Grid`
 - [x] Add a Vite dev server for visual and manual testing. It replaces the old script-tag, global-`L` demo
+- [x] Fix a real crash found through the dev server: the built layers had no working `onAdd`. The build's ES2020 target
+      made class methods non-enumerable, and Leaflet's mixin only copies enumerable properties. Set the build target
+      back to ES5 and added a test against the real built output, not just the raw source
 
 ## Remaining test coverage
 
