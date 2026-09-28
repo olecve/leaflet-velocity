@@ -26,6 +26,7 @@
     "knip:ci": "knip --no-progress --reporter compact",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "prepare": "npm run build",
     "test": "vitest run",
     "watch": "tsc --watch"
   },
