@@ -6,10 +6,10 @@ import Windy from './windy';
 import CanvasLayer from './L.CanvasLayer';
 import VelocityLayer from './L.VelocityLayer';
 import ControlVelocity from './L.Control.Velocity';
-import { VelocityDisplayOptions, VelocityOptions } from './types';
+import { Position, SpeedUnit, VelocityDisplayOptions, VelocityOptions } from './types';
 
 export { CanvasBound, MapBound, Windy };
-export type { VelocityDisplayOptions, VelocityOptions };
+export type { Position, SpeedUnit, VelocityDisplayOptions, VelocityOptions };
 
 // Extends the imported L, not window.L — see README. The .extend() mixin pattern is inherently untypeable, hence the casts.
 const extendableL = L as unknown as Record<string, unknown>;

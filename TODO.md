@@ -20,6 +20,7 @@
 - [x] Fix a real crash found through the dev server: the built layers had no working `onAdd`. The build's ES2020 target
       made class methods non-enumerable, and Leaflet's mixin only copies enumerable properties. Set the build target
       back to ES5 and added a test against the real built output, not just the raw source
+- [x] Add knip (unused files, exports, and dependencies)
 
 ## Remaining test coverage
 

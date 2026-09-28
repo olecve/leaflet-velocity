@@ -17,5 +17,6 @@ jobs:
       - run: npm ci
       - run: npm run fmt:check
       - run: npm run lint
+      - run: npm run knip:ci
       - run: npm run build
       - run: npm run test
