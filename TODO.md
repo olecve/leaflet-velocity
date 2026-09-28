@@ -31,11 +31,10 @@
       `ColorScale`, `MapBound`) after checking they don't exercise any code path the existing tests don't already cover
 - [x] Upgrade to `vitest@5`. This fixes the `@vitest/mocker` vulnerability. No code changes were needed — all 50 tests
       passed unchanged across the jump from `3.1.1`, skipping the whole `4.x` line
-
-## Remaining test coverage
-
-- [ ] Add tests for `L.CanvasLayer.ts` later. It only wires DOM elements and events to Leaflet. The mocking cost is high
-      compared with the value the tests would add right now
+- [x] Split `src` into `core/` (windy simulation math) and `leaflet/` (the classes that extend `L`)
+- [x] Add tests for `L.CanvasLayer.ts`. Kept the mocking cost down with minimal fake `L.Map` objects (same style as
+      `L.VelocityLayer.spec.ts`) and by neutralizing `onAdd`'s async side effects (fake timers, a stubbed
+      `L.Util.requestAnimFrame`) instead of fully faking map internals like `crs` projection
 
 ## On hold
 
