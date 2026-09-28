@@ -1,5 +1,5 @@
 import '../dist/index.js';
-import '../src/leaflet-velocity.css';
+import '../src/leaflet/leaflet-velocity.css';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 

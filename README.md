@@ -12,13 +12,14 @@ This is a typescript updated version of [leaflet-velocity](https://github.com/da
   an assumption that breaks under a bundler, where more than one copy of Leaflet can exist on the same page.
 - Real ESM + generated TypeScript declarations (`tsc`, `declaration: true`) — the original never shipped working types
   for consumers.
-- The control's stylesheet (`src/leaflet-velocity.css`) is no longer auto-injected — import it explicitly (see below).
+- The control's stylesheet (`src/leaflet/leaflet-velocity.css`) is no longer auto-injected — import it explicitly (see
+  below).
 
 ## Example use:
 
 ```javascript
 import '@olecve/leaflet-velocity';
-import '@olecve/leaflet-velocity/src/leaflet-velocity.css'; // only needed if displayValues is enabled
+import '@olecve/leaflet-velocity/src/leaflet/leaflet-velocity.css'; // only needed if displayValues is enabled
 import L from 'leaflet';
 
 const velocityLayer = L.velocityLayer({

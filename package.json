@@ -1,6 +1,6 @@
 {
   "name": "@olecve/leaflet-velocity",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Visualise velocity layers with leaflet (Typescript fork)",
   "license": "MIT",
   "author": "Dan Wild <danwild@y7mail.com>",
@@ -14,7 +14,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "src/leaflet-velocity.css"
+    "src/leaflet/leaflet-velocity.css"
   ],
   "scripts": {
     "build": "tsc",

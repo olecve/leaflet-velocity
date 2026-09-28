@@ -1,9 +1,9 @@
 import L from 'leaflet';
 
-import Windy from './windy.js';
-import { VelocityDisplayOptions } from './types.js';
+import Windy from '../core/windy.js';
+import { VelocityDisplayOptions } from '../types.js';
 
-// Ship src/leaflet-velocity.css as a plain stylesheet for consumers to import themselves.
+// Ship src/leaflet/leaflet-velocity.css as a plain stylesheet for consumers to import themselves.
 const LEAFLET_VELOCITY_CONTROL_CLASS = 'leaflet-velocity-control';
 
 export default class ControlVelocity {
