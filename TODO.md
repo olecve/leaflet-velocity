@@ -2,32 +2,36 @@
 
 ## Done
 
-- [x] Recover TS source (last known-good state before it was vendored elsewhere as a compiled blob)
-- [x] Fix `animationBucket` crash in `stop()`/`evolve()` when called before `start()`
-- [x] Fix global `window.L` mutation — extend the imported Leaflet module instead
+- [x] Recover the TypeScript source (the last known-good version, before another project vendored it as a compiled blob)
+- [x] Fix a crash: `stop()` and `evolve()` failed in `animationBucket` when called before `start()`
+- [x] Stop mutating the global `window.L`. Extend the imported Leaflet module instead
 - [x] Tighten `bilinearInterpolateVector`'s types
-- [x] Rename package to `@olecve/leaflet-velocity`
+- [x] Rename the package to `@olecve/leaflet-velocity`
 - [x] Add Prettier
 - [x] Add sort-package-json
-- [x] Add ESLint (recommended + typescript-eslint), resolve all findings
-- [x] Add combined `check` script + GitHub Actions CI
-- [x] Replace webpack + CSS-modules build with plain `tsc` (real ESM + generated `.d.ts`)
-- [x] Properly type the Leaflet extension points (`declare module 'leaflet'` augmentation)
-- [x] Fix `MapBound.width`/`height` (broken wraparound formula on radian values)
+- [x] Add ESLint with the recommended and typescript-eslint rule sets. Fix all findings
+- [x] Add a combined `check` script and GitHub Actions CI
+- [x] Replace the webpack and CSS-modules build with plain `tsc`. This produces real ESM output and generated `.d.ts`
+      files
+- [x] Add types for the Leaflet extension points with a `declare module 'leaflet'` augmentation
+- [x] Fix `MapBound.width` and `MapBound.height`. The old wraparound formula was wrong for radian values
 - [x] Add tests for `ColorScale` and `Grid`
-- [x] Dev server for visual/manual testing (Vite + ESM demo, replacing the old script-tag/global-`L` version)
+- [x] Add a Vite dev server for visual and manual testing. It replaces the old script-tag, global-`L` demo
 
 ## Remaining test coverage
 
-- [ ] `Vector` — trivial (`intensity` getter), but currently untested
-- [ ] `Particle` — `reset`, `isDead`, `grow`
-- [ ] `CanvasBound` — `width`/`height`, `getRandomParticule`/`resetParticule` (random within bounds)
-- [ ] `layer.ts` — the actual projection math (`canvasToMap`, `mapToCanvas`, `distortion`, `distort`); worth at least a
-      round-trip sanity check (`mapToCanvas` then `canvasToMap` returns close to the original point)
-- [ ] `L.CanvasLayer.ts` — thin Leaflet-integration glue (DOM + event wiring); lower priority, expensive to mock for the
-      value it'd add
+- [ ] Add tests for `Vector`. It has a single getter (`intensity`), but no test covers it yet
+- [ ] Add tests for `Particle`: `reset`, `isDead`, and `grow`
+- [ ] Add tests for `CanvasBound`: `width`, `height`, `getRandomParticule`, and `resetParticule`. Check that the random
+      values stay inside the bounds
+- [ ] Add tests for the projection math in `layer.ts`: `canvasToMap`, `mapToCanvas`, `distortion`, and `distort`. At
+      minimum, add a round-trip check: call `mapToCanvas`, then `canvasToMap`, and confirm the result is close to the
+      original point
+- [ ] Add tests for `L.CanvasLayer.ts` later. It only wires DOM elements and events to Leaflet. The mocking cost is high
+      compared with the value the tests would add right now
 
-## Parked / needs a decision
+## On hold
 
-- [ ] Hosting for this repo (GitHub vs GitLab vs stay local) — explicitly deferred, revisit when ready
-- [ ] `npm audit` moderate vulnerability in `@vitest/mocker` (dev-only; fix requires a breaking `vitest@5` bump)
+- [ ] Decide where to host this repo: GitHub, GitLab, or local only. This decision is on hold. Revisit it when ready
+- [ ] Fix the moderate `npm audit` vulnerability in `@vitest/mocker`. It affects only a dev dependency. The fix needs a
+      breaking upgrade to `vitest@5`
