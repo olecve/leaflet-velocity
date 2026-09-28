@@ -21,16 +21,13 @@
       made class methods non-enumerable, and Leaflet's mixin only copies enumerable properties. Set the build target
       back to ES5 and added a test against the real built output, not just the raw source
 - [x] Add knip (unused files, exports, and dependencies)
+- [x] Add tests for `Vector`, `Particle`, and `CanvasBound`
+- [x] Add a round-trip test for `layer.ts`'s projection math (`mapToCanvas` then `canvasToMap`, plus the edge mappings).
+      `distortion`/`distort` still have no dedicated test — a finite-difference approximation that's harder to pin down
+      a correct expected value for without more care
 
 ## Remaining test coverage
 
-- [ ] Add tests for `Vector`. It has a single getter (`intensity`), but no test covers it yet
-- [ ] Add tests for `Particle`: `reset`, `isDead`, and `grow`
-- [ ] Add tests for `CanvasBound`: `width`, `height`, `getRandomParticule`, and `resetParticule`. Check that the random
-      values stay inside the bounds
-- [ ] Add tests for the projection math in `layer.ts`: `canvasToMap`, `mapToCanvas`, `distortion`, and `distort`. At
-      minimum, add a round-trip check: call `mapToCanvas`, then `canvasToMap`, and confirm the result is close to the
-      original point
 - [ ] Add tests for `L.CanvasLayer.ts` later. It only wires DOM elements and events to Leaflet. The mocking cost is high
       compared with the value the tests would add right now
 
