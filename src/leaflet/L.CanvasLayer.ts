@@ -1,23 +1,28 @@
 import L, { Layer, ZoomAnimEvent } from 'leaflet';
 
-// -- L.DomUtil.setTransform from leaflet 1.0.0 to work on 0.0.7
-if (!L.DomUtil.setTransform) {
-  L.DomUtil.setTransform = (el: any, offset: any, scale: any) => {
-    const pos = offset || new L.Point(0, 0);
-
-    el.style[L.DomUtil.TRANSFORM] =
-      (L.Browser.ie3d
-        ? 'translate(' + pos.x + 'px,' + pos.y + 'px)'
-        : 'translate3d(' + pos.x + 'px,' + pos.y + 'px,0)') + (scale ? ' scale(' + scale + ')' : '');
-  };
+interface CanvasLayerDrawInfo {
+  layer: CanvasLayer;
+  canvas: HTMLCanvasElement;
+  bounds: L.LatLngBounds;
+  size: L.Point;
+  zoom: number;
+  center: L.Point;
+  corner: L.Point;
 }
+
+export interface CanvasLayerDelegate {
+  onLayerDidMount?(): void;
+  onLayerWillUnmount?(): void;
+  onDrawLayer?(info: CanvasLayerDrawInfo): void;
+}
+
 export default class CanvasLayer {
   protected _map: L.Map;
   private _canvas: HTMLCanvasElement;
   private _frame: number;
-  private _del: any;
+  private _del: CanvasLayerDelegate;
 
-  public initialize(options: any) {
+  public initialize(options?: Record<string, unknown>) {
     this._map = null;
     this._canvas = null;
     this._frame = null;
@@ -29,7 +34,7 @@ export default class CanvasLayer {
     return this._canvas;
   }
 
-  public delegate(del: any): CanvasLayer {
+  public delegate(del: CanvasLayerDelegate): CanvasLayer {
     this._del = del;
     return this;
   }
@@ -41,11 +46,11 @@ export default class CanvasLayer {
     return this;
   }
 
-  public getEvents() {
-    const events = {
+  public getEvents(): L.LeafletEventHandlerFnMap {
+    const events: L.LeafletEventHandlerFnMap = {
       resize: this.onLayerDidResize,
       moveend: this.onLayerDidMove,
-      zoomanim: <any>undefined,
+      zoomanim: undefined,
     };
     if (this._map.options.zoomAnimation && L.Browser.any3d) {
       events.zoomanim = this.animateZoom;
@@ -66,9 +71,10 @@ export default class CanvasLayer {
     L.DomUtil.addClass(this._canvas, 'leaflet-zoom-' + (animated ? 'animated' : 'hide'));
 
     map.getPanes().overlayPane.appendChild(this._canvas);
-    map.on(this.getEvents() as any, this as any);
+    // @types/leaflet's `on(eventMap)` overload omits the context param the real implementation accepts.
+    (map.on as (eventMap: L.LeafletEventHandlerFnMap, context?: unknown) => void)(this.getEvents(), this);
 
-    const del = this._del || this;
+    const del = (this._del || this) as CanvasLayerDelegate;
     if (del.onLayerDidMount) del.onLayerDidMount(); // -- callback
     this.needRedraw();
 
@@ -78,12 +84,13 @@ export default class CanvasLayer {
   }
 
   public onRemove(map: L.Map) {
-    const del = this._del || this;
+    const del = (this._del || this) as CanvasLayerDelegate;
     if (del.onLayerWillUnmount) del.onLayerWillUnmount(); // -- callback
 
     map.getPanes().overlayPane.removeChild(this._canvas);
 
-    map.off(this.getEvents() as any, this as any);
+    // @types/leaflet's `off(eventMap)` overload omits the context param the real implementation accepts.
+    (map.off as (eventMap: L.LeafletEventHandlerFnMap, context?: unknown) => void)(this.getEvents(), this);
 
     this._canvas = null;
   }
@@ -102,7 +109,7 @@ export default class CanvasLayer {
     const center = this._map.options.crs.project(this._map.getCenter());
     const corner = this._map.options.crs.project(this._map.containerPointToLatLng(this._map.getSize()));
 
-    const del = this._del || this;
+    const del = (this._del || this) as CanvasLayerDelegate;
     if (del.onDrawLayer)
       del.onDrawLayer({
         layer: this,
@@ -114,17 +121,6 @@ export default class CanvasLayer {
         corner: corner,
       });
     this._frame = null;
-  }
-
-  // -- L.DomUtil.setTransform from leaflet 1.0.0 to work on 0.0.7
-  //------------------------------------------------------------------------------
-  _setTransform(el: any, offset: any, scale: any) {
-    const pos = offset || new L.Point(0, 0);
-
-    el.style[L.DomUtil.TRANSFORM] =
-      (L.Browser.ie3d
-        ? 'translate(' + pos.x + 'px,' + pos.y + 'px)'
-        : 'translate3d(' + pos.x + 'px,' + pos.y + 'px,0)') + (scale ? ' scale(' + scale + ')' : '');
   }
 
   private animateZoom(e: ZoomAnimEvent) {
@@ -140,7 +136,7 @@ export default class CanvasLayer {
     L.DomUtil.setTransform(this._canvas, offset, scale);
   }
 
-  private onLayerDidResize(resizeEvent: any) {
+  private onLayerDidResize(resizeEvent: L.ResizeEvent) {
     this._canvas.width = resizeEvent.newSize.x;
     this._canvas.height = resizeEvent.newSize.y;
   }

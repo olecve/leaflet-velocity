@@ -12,10 +12,26 @@ export interface VelocityDisplayOptions {
   speedString: string;
 }
 
+export interface WindDataHeader {
+  parameterCategory: number;
+  parameterNumber: number;
+  la1: number;
+  lo1: number;
+  dx: number;
+  dy: number;
+  nx: number;
+  ny: number;
+}
+
+export interface WindDataRecord {
+  header: WindDataHeader;
+  data: number[];
+}
+
 export interface VelocityOptions {
   displayValues: boolean;
   displayOptions: Partial<VelocityDisplayOptions>;
-  data: unknown; // see demo/*.json, or wind-js-server for example data service
+  data: WindDataRecord[]; // see demo/data.js, or wind-js-server for example data service
   // OPTIONAL
   particleAge: number;
   particleMultiplier: number;

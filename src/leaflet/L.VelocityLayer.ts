@@ -5,17 +5,19 @@ import CanvasBound from '../core/canvasBound.js';
 import MapBound from '../core/mapBound.js';
 import Layer from '../core/layer.js';
 import CanvasLayer from './L.CanvasLayer.js';
-import { VelocityOptions } from '../types.js';
+import { VelocityOptions, WindDataRecord } from '../types.js';
+
+type VelocityLayerMapEvents = Record<'dragstart' | 'dragend' | 'zoomstart' | 'zoomend' | 'resize', () => void>;
 
 export default class VelocityLayer {
   private options: Partial<VelocityOptions>;
   private _map: L.Map = null;
   private _canvasLayer: CanvasLayer & L.Layer = null;
   private _windy: Windy = null;
-  private _context: any = null;
+  private _context: CanvasRenderingContext2D = null;
   private _displayTimeout: ReturnType<typeof setTimeout> = null;
-  private _mapEvents: any = null;
-  private _mouseControl: any = null;
+  private _mapEvents: VelocityLayerMapEvents = null;
+  private _mouseControl: L.Control.Velocity | false | null = null;
   private _paneName: string = null;
 
   constructor() {
@@ -55,12 +57,12 @@ export default class VelocityLayer {
     if (this._windy) {
       this._windy.setOptions(options);
       if (options.data) {
-        this._windy.setData(options.data as any[]);
+        this._windy.setData(options.data);
       }
       this.clearAndRestart();
     }
 
-    (<any>this).fire('load');
+    (this as unknown as { fire(event: string): void }).fire('load');
   }
 
   onAdd(map: L.Map) {
@@ -83,13 +85,13 @@ export default class VelocityLayer {
     if (this.options.onAdd) this.options.onAdd();
   }
 
-  onRemove(_map: any) {
+  onRemove(_map: L.Map) {
     this.destroyWind();
 
     if (this.options.onRemove) this.options.onRemove();
   }
 
-  setData(data: any) {
+  setData(data: WindDataRecord[]) {
     this.options.data = data;
 
     if (this._windy) {
@@ -97,7 +99,7 @@ export default class VelocityLayer {
       this.clearAndRestart();
     }
 
-    (<any>this).fire('load');
+    (this as unknown as { fire(event: string): void }).fire('load');
   }
 
   onDrawLayer() {
@@ -140,7 +142,7 @@ export default class VelocityLayer {
 
     for (const e in this._mapEvents) {
       if (Object.prototype.hasOwnProperty.call(this._mapEvents, e)) {
-        this._map[bind ? 'on' : 'off'](e, this._mapEvents[e]);
+        this._map[bind ? 'on' : 'off'](e, this._mapEvents[e as keyof VelocityLayerMapEvents]);
       }
     }
   }
@@ -164,7 +166,7 @@ export default class VelocityLayer {
 
   private initMouseHandler(unbind: boolean = false) {
     if (unbind) {
-      this._map.removeControl(this._mouseControl);
+      this._map.removeControl(this._mouseControl as L.Control.Velocity);
       this._mouseControl = false;
     }
 

@@ -9,8 +9,8 @@ const LEAFLET_VELOCITY_CONTROL_CLASS = 'leaflet-velocity-control';
 export default class ControlVelocity {
   private options: VelocityDisplayOptions;
   private _windy: Windy = null;
-  private _map: any = null;
-  private _container: any = null;
+  private _map: L.Map = null;
+  private _container: HTMLElement = null;
 
   constructor() {
     this.options = {
@@ -25,7 +25,7 @@ export default class ControlVelocity {
     };
   }
 
-  setWindy(_windy: any) {
+  setWindy(_windy: Windy) {
     if (!this._windy && _windy) this._windy = _windy;
   }
 
@@ -33,7 +33,7 @@ export default class ControlVelocity {
     L.Util.setOptions(this, options);
   }
 
-  onAdd(map: any) {
+  onAdd(map: L.Map) {
     this._map = map;
     this._container = L.DomUtil.create('div', LEAFLET_VELOCITY_CONTROL_CLASS);
     L.DomEvent.disableClickPropagation(this._container);
@@ -42,7 +42,7 @@ export default class ControlVelocity {
     return this._container;
   }
 
-  onRemove(_map: any) {
+  onRemove(_map: L.Map) {
     this._map.off('mousemove', this.drawWindSpeed, this);
   }
 
@@ -130,7 +130,7 @@ export default class ControlVelocity {
     return cardinalDirection;
   }
 
-  drawWindSpeed(ev: any) {
+  drawWindSpeed(ev: L.LeafletMouseEvent) {
     const pos = this._map.containerPointToLatLng(L.point(ev.containerPoint.x, ev.containerPoint.y));
     const gridValue = this._windy.interpolate(pos.lng, pos.lat);
     let template = '';

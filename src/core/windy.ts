@@ -4,10 +4,11 @@ import ColorScale from './colorScale.js';
 import Particule from './particle.js';
 import AnimationBucket from './animationBucket.js';
 import Layer from './layer.js';
+import { WindDataRecord } from '../types.js';
 
 export interface WindyOptions {
-  canvas: any;
-  data?: any;
+  canvas: HTMLCanvasElement;
+  data?: WindDataRecord[];
   colorScale?: string[];
   maxVelocity?: number;
   minVelocity?: number;
@@ -19,6 +20,9 @@ export interface WindyOptions {
   opacity?: number;
 }
 export default class Windy {
+  // Grid is also (ab)used as an array-like bag of rows (this.grid[j] = row, read back in interpolate()),
+  // bypassing Grid's own public API and its private `data` field. Left as `any` rather than typed as
+  // `Grid` — that would require restructuring this dual usage, a behavior change beyond a types-only pass.
   private grid: any;
   private λ0: number;
   private φ0: number;
@@ -26,7 +30,7 @@ export default class Windy {
   private Δφ: number;
   private ni: number;
   private nj: number;
-  private canvas: any = null;
+  private canvas: HTMLCanvasElement = null;
   private colorScale: ColorScale;
   private velocityScale: number;
   private particleMultiplier = 1 / 300;
@@ -38,8 +42,8 @@ export default class Windy {
   private layer: Layer;
   private particules: Particule[] = [];
   private animationBucket: AnimationBucket;
-  private context2D: any;
-  private animationLoop: any = null;
+  private context2D: CanvasRenderingContext2D;
+  private animationLoop: number = null;
   private frameTime: number;
   private then = 0;
 
@@ -82,9 +86,9 @@ export default class Windy {
    * Load data
    * @param data
    */
-  public setData(data: any[]) {
-    let uData: any = null;
-    let vData: any = null;
+  public setData(data: WindDataRecord[]) {
+    let uData: WindDataRecord = null;
+    let vData: WindDataRecord = null;
     const grid: Vector[] = [];
 
     data.forEach(record => {
@@ -158,7 +162,7 @@ export default class Windy {
    * @param φ {Float} Latitude
    * @returns {Object}
    */
-  public interpolate(λ: number, φ: number): any {
+  public interpolate(λ: number, φ: number): [number, number, number] | null {
     if (!this.grid) {
       return null;
     }
@@ -217,7 +221,7 @@ export default class Windy {
     return a - n * Math.floor(a / n);
   }
 
-  private isValue(x: any) {
+  private isValue(x: unknown) {
     return x !== null && x !== undefined;
   }
 
