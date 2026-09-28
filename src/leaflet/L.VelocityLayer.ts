@@ -10,6 +10,9 @@ import { VelocityOptions, WindDataRecord } from '../types.js';
 type VelocityLayerMapEvents = Record<'dragstart' | 'dragend' | 'zoomstart' | 'zoomend' | 'resize', () => void>;
 
 export default class VelocityLayer {
+  // Provided by Leaflet's Evented mixin once .extend() merges this class in (see index.ts) — not implemented here.
+  declare fire: (type: string, data?: unknown, propagate?: boolean) => this;
+
   private options: Partial<VelocityOptions>;
   private _map: L.Map = null;
   private _canvasLayer: CanvasLayer & L.Layer = null;
@@ -62,7 +65,7 @@ export default class VelocityLayer {
       this.clearAndRestart();
     }
 
-    (this as unknown as { fire(event: string): void }).fire('load');
+    this.fire('load');
   }
 
   onAdd(map: L.Map) {
@@ -99,7 +102,7 @@ export default class VelocityLayer {
       this.clearAndRestart();
     }
 
-    (this as unknown as { fire(event: string): void }).fire('load');
+    this.fire('load');
   }
 
   onDrawLayer() {
