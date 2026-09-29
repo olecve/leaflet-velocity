@@ -58,6 +58,22 @@ describe('Windy', () => {
     warn.mockRestore();
   });
 
+  it('setData() warns and leaves the grid unset when data length does not match nx*ny', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const windy = createWindy();
+    const header = { la1: 10, lo1: 0, dy: 10, dx: 10, ny: 2, nx: 2 };
+
+    windy.setData([
+      { header: { ...header, parameterCategory: 2, parameterNumber: 2 }, data: [1, 2, 0] }, // 3, not nx*ny=4
+      { header: { ...header, parameterCategory: 2, parameterNumber: 3 }, data: [0, 0, 1, 2] },
+    ] as any);
+
+    expect(warn).toHaveBeenCalledWith('Wind data length does not match nx*ny (expected 4)');
+    expect(windy.interpolate(0, 0)).toBeNull();
+
+    warn.mockRestore();
+  });
+
   it('interpolate() delegates to the same Grid used for particle animation', () => {
     const windy = createWindy();
     windy.setData(uAndVComponents());

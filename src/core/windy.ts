@@ -5,6 +5,7 @@ import Particule from './particle.js';
 import AnimationBucket from './animationBucket.js';
 import Layer from './layer.js';
 import { WindDataRecord, WindySimulationOptions } from '../types.js';
+import { validateWindData } from './windDataValidation.js';
 
 export type WindyOptions = Partial<WindySimulationOptions> & {
   canvas: HTMLCanvasElement;
@@ -88,6 +89,12 @@ export default class Windy {
 
     if (!uData || !vData) {
       console.warn('Data are not correct format');
+      return;
+    }
+
+    const validationError = validateWindData(uData, vData);
+    if (validationError) {
+      console.warn(validationError);
       return;
     }
 
