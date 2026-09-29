@@ -69,16 +69,13 @@ export default class VelocityLayer {
   }
 
   onAdd(map: L.Map) {
-    // determine where to add the layer
     this._paneName = this.options.paneName || 'overlayPane';
 
-    // fall back to overlayPane for leaflet < 1
-    if (map.getPane) {
-      // ensure the pane exists (attempt to get it first to preserve parent - createPane voids this)
-      if (!map.getPane(this._paneName)) {
-        map.createPane(this._paneName);
-      }
+    // ensure the pane exists (attempt to get it first to preserve parent - createPane voids this)
+    if (!map.getPane(this._paneName)) {
+      map.createPane(this._paneName);
     }
+
     // create canvas, add overlay control
     this._canvasLayer = L.canvasLayer().delegate(this) as CanvasLayer & L.Layer;
     this._canvasLayer.addTo(map);

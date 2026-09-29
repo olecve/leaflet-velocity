@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import L from 'leaflet';
+import L, { ZoomAnimEvent } from 'leaflet';
 
 import CanvasLayer from './L.CanvasLayer';
 
@@ -128,6 +128,32 @@ describe('CanvasLayer.drawLayer', () => {
     (layer as unknown as { _map: L.Map })._map = fakeDrawMap();
 
     expect(() => layer.drawLayer()).not.toThrow();
+  });
+});
+
+describe('CanvasLayer.animateZoom', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('sets the canvas transform to the new layer point and zoom scale', () => {
+    const latLngToNewLayerPoint = vi.fn(() => 'new-offset');
+    const map = {
+      getZoomScale: (zoom: number) => zoom * 2,
+      getBounds: () => ({ getNorthWest: () => 'nw-corner' }),
+      _latLngToNewLayerPoint: latLngToNewLayerPoint,
+    } as unknown as L.Map;
+    const canvas = document.createElement('canvas');
+    const setTransform = vi.spyOn(L.DomUtil, 'setTransform').mockImplementation(() => {});
+    const layer = new CanvasLayer();
+    (layer as unknown as { _map: L.Map })._map = map;
+    (layer as unknown as { _canvas: HTMLCanvasElement })._canvas = canvas;
+    const event = { zoom: 5, center: 'center-latlng' } as unknown as ZoomAnimEvent;
+
+    (layer as unknown as { animateZoom: (e: ZoomAnimEvent) => void }).animateZoom(event);
+
+    expect(latLngToNewLayerPoint).toHaveBeenCalledWith('nw-corner', 5, 'center-latlng');
+    expect(setTransform).toHaveBeenCalledWith(canvas, 'new-offset', 10);
   });
 });
 

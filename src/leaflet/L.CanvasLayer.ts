@@ -125,13 +125,7 @@ export default class CanvasLayer {
 
   private animateZoom(e: ZoomAnimEvent) {
     const scale = this._map.getZoomScale(e.zoom);
-    // -- different calc of offset in leaflet 1.0.0 and 0.0.7 thanks for 1.0.0-rc2 calc @jduggan1
-    const offset = L.Layer
-      ? (<any>this._map)._latLngToNewLayerPoint(this._map.getBounds().getNorthWest(), e.zoom, e.center)
-      : (<any>this._map)
-          ._getCenterOffset(e.center)
-          ._multiplyBy(-scale)
-          .subtract((<any>this._map)._getMapPanePos());
+    const offset = (<any>this._map)._latLngToNewLayerPoint(this._map.getBounds().getNorthWest(), e.zoom, e.center);
 
     L.DomUtil.setTransform(this._canvas, offset, scale);
   }

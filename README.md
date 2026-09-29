@@ -9,6 +9,8 @@ particles over the map, with an optional hover control showing speed and directi
 Forked from [leaflet-velocity-ts](https://github.com/0nza1101/leaflet-velocity-ts), itself a TypeScript port of the
 original [leaflet-velocity](https://github.com/danwild/leaflet-velocity).
 
+Requires Leaflet 1.0.0 or later.
+
 [Live demo](https://olecve.github.io/leaflet-velocity/)
 
 ### Compared to the other versions:
@@ -73,8 +75,7 @@ const velocityLayer = L.velocityLayer({
   colorScale: [],
   onAdd: () => console.log('onAdd'),
   onRemove: () => console.log('onRemove'),
-  // optional pane to add the layer, will be created if doesn't exist
-  // leaflet v1+ only (falls back to overlayPane for < v1)
+  // optional pane to add the layer, will be created if it doesn't exist
   paneName: 'overlayPane',
 });
 

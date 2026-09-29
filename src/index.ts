@@ -21,7 +21,7 @@ export type { Position, SpeedUnit, VelocityDisplayOptions, VelocityOptions, Wind
 // Extends the imported L, not window.L — see README. The .extend() mixin pattern is inherently untypeable, hence the casts.
 const extendableL = L as unknown as Record<string, unknown>;
 
-extendableL.CanvasLayer = (L.Layer ? L.Layer : L.Class).extend(new CanvasLayer());
+extendableL.CanvasLayer = L.Layer.extend(new CanvasLayer());
 extendableL.canvasLayer = function () {
   return new (L as unknown as { CanvasLayer: new () => CanvasLayer }).CanvasLayer();
 };
@@ -33,7 +33,7 @@ extendableL.canvasLayer = function () {
   ).Velocity(options);
 };
 
-extendableL.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend(new VelocityLayer());
+extendableL.VelocityLayer = L.Layer.extend(new VelocityLayer());
 extendableL.velocityLayer = function (options: Partial<VelocityOptions>) {
   return new (L as unknown as { VelocityLayer: new (options: Partial<VelocityOptions>) => L.Layer }).VelocityLayer(
     options,
