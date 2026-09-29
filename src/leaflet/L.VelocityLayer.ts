@@ -199,19 +199,19 @@ export default class VelocityLayer {
   }
 
   private clearAndRestart() {
-    if (this._context) this._context.clearRect(0, 0, 3000, 3000);
+    if (this._context) this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
     if (this._windy) this.startWindy();
   }
 
   private clearWind() {
     if (this._windy) this._windy.stop();
-    if (this._context) this._context.clearRect(0, 0, 3000, 3000);
+    if (this._context) this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
   }
 
   private destroyWind() {
     if (this._displayTimeout) clearTimeout(this._displayTimeout);
     if (this._windy) this._windy.stop();
-    if (this._context) this._context.clearRect(0, 0, 3000, 3000);
+    if (this._context) this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
     if (this._mouseControl) this._map.removeControl(this._mouseControl);
     this._mouseControl = null;
     this._windy = null;
