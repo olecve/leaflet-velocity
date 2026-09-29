@@ -28,6 +28,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "npm run build",
+    "refresh-demo-data": "command -v clojure >/dev/null 2>&1 || { echo 'Error: clojure CLI not found. Install it: https://clojure.org/guides/install_clojure' >&2; exit 1; }; clojure -M scripts/refresh_demo_data.clj",
     "test": "vitest run",
     "watch": "tsc --watch"
   },

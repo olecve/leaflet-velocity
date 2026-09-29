@@ -5,7 +5,7 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
   {
     // demo/*.js are legacy fixture data/scripts (not part of the package); demo/main.ts is real code and gets linted.
-    ignores: ['dist', 'node_modules', 'demo/*.js'],
+    ignores: ['dist', 'node_modules', 'demo/*.js', 'site-dist'],
   },
   js.configs.recommended,
   tseslint.configs.recommended,

@@ -5,8 +5,8 @@ import 'leaflet/dist/leaflet.css';
 
 import data from './data.js';
 
-// Centered on the strongest wind in this dataset (~32 m/s near 20°N 130°E) so the animation is obvious immediately.
-const map = L.map('mapid', { attributionControl: false }).setView([20, 130], 4);
+// Centered on the strongest wind in this dataset (~35 m/s near 20°N 164°W) so the animation is obvious immediately.
+const map = L.map('mapid', { attributionControl: false }).setView([20, -164], 4);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18,
