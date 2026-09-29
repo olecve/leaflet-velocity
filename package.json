@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "build:demo": "npm run build && vite build",
     "check": "npm run fmt:check && npm run lint && npm run knip && npm run build && npm run test",
     "demo": "npm run build && vite",
     "fmt": "prettier --write . && sort-package-json",

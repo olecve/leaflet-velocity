@@ -3,6 +3,8 @@
 This is a typescript updated version of [leaflet-velocity](https://github.com/danwild/leaflet-velocity), forked from
 [leaflet-velocity-ts](https://github.com/0nza1101/leaflet-velocity-ts).
 
+[Live demo](https://olecve.github.io/leaflet-velocity/)
+
 ### Compared to the other versions:
 
 - Compatible with the latest version of leaflet.
