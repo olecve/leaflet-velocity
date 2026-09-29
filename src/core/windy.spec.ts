@@ -17,6 +17,15 @@ function uComponentOnly(): any {
   ];
 }
 
+// Same 2x2 grid as grid.spec.ts's make2x2Grid, split into separate u/v records the way real GRIB data arrives.
+function uAndVComponents(): any {
+  const header = { la1: 10, lo1: 0, dy: 10, dx: 10, ny: 2, nx: 2 };
+  return [
+    { header: { ...header, parameterCategory: 2, parameterNumber: 2 }, data: [1, 2, 0, 0] },
+    { header: { ...header, parameterCategory: 2, parameterNumber: 3 }, data: [0, 0, 1, 2] },
+  ];
+}
+
 describe('Windy', () => {
   it('stop() does not throw when called before start() has ever run', () => {
     // animationBucket is only created in start(); a layer removed right after being added used to throw here.
@@ -47,5 +56,25 @@ describe('Windy', () => {
     expect(windy.interpolate(0, 0)).toBeNull();
 
     warn.mockRestore();
+  });
+
+  it('interpolate() delegates to the same Grid used for particle animation', () => {
+    const windy = createWindy();
+    windy.setData(uAndVComponents());
+
+    // Halfway between the two points on the north row (both v=0): u should be the midpoint, 1.5.
+    const [u, v, speed] = windy.interpolate(5, 10)!;
+
+    expect(u).toBeCloseTo(1.5);
+    expect(v).toBeCloseTo(0);
+    expect(speed).toBeCloseTo(1.5);
+  });
+
+  it('interpolate() returns a zero vector, not null, for a point outside the loaded grid', () => {
+    // interpolate() only returns null when the grid itself was never set (see the test above).
+    const windy = createWindy();
+    windy.setData(uAndVComponents());
+
+    expect(windy.interpolate(1000, 1000)).toEqual([0, 0, 0]);
   });
 });

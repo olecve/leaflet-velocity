@@ -8,6 +8,9 @@ export default class Grid {
   private Δφ: number;
   private height: number;
   private width: number;
+  // Whether the grid spans the full 360° of longitude (a global grid) and therefore wraps at the
+  // antimeridian, vs. a regional window that should just clamp at its edge like latitude already does.
+  private isContinuous: boolean;
 
   constructor(data: Vector[], φ0: number, λ0: number, Δφ: number, Δλ: number, height: number, width: number) {
     this.data = data;
@@ -17,6 +20,7 @@ export default class Grid {
     this.Δφ = Δφ;
     this.height = height;
     this.width = width;
+    this.isContinuous = Math.floor(width * Δλ) >= 360;
   }
 
   get valueRange(): number[] {
@@ -43,7 +47,7 @@ export default class Grid {
     const iλ = Math.floor(fλ); // col n
     let jλ = iλ + 1; // col n+1
     if (jλ >= this.width) {
-      jλ = this.λ0;
+      jλ = this.isContinuous ? 0 : iλ;
     }
     const iφ = Math.floor(fφ); // line m
     let jφ = iφ + 1; // line m+1

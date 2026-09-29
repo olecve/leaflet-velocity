@@ -10,16 +10,7 @@ export type WindyOptions = Partial<WindySimulationOptions> & {
   canvas: HTMLCanvasElement;
 };
 export default class Windy {
-  // Grid is also (ab)used as an array-like bag of rows (this.grid[j] = row, read back in interpolate()),
-  // bypassing Grid's own public API and its private `data` field. Left as `any` rather than typed as
-  // `Grid` — that would require restructuring this dual usage, a behavior change beyond a types-only pass.
-  private grid: any;
-  private λ0: number;
-  private φ0: number;
-  private Δλ: number;
-  private Δφ: number;
-  private ni: number;
-  private nj: number;
+  private grid: Grid;
   private canvas: HTMLCanvasElement = null;
   private colorScale: ColorScale;
   private velocityScale: number;
@@ -117,30 +108,6 @@ export default class Windy {
       uData.header.nx,
     );
 
-    this.λ0 = uData.header.lo1;
-    this.φ0 = uData.header.la1;
-
-    this.Δλ = uData.header.dx;
-    this.Δφ = uData.header.dy;
-
-    this.ni = uData.header.nx;
-    this.nj = uData.header.ny; // number of grid points W-E and N-S (e.g., 144 x 73)
-
-    let p = 0;
-    const isContinuous = Math.floor(this.ni * this.Δλ) >= 360;
-
-    for (let j = 0; j < this.nj; j++) {
-      const row = [];
-      for (let i = 0; i < this.ni; i++, p++) {
-        row[i] = this.grid.data[p];
-      }
-      if (isContinuous) {
-        // For wrapped grids, duplicate first column as last column to simplify interpolation logic
-        row.push(row[0]);
-      }
-      this.grid[j] = row;
-    }
-
     if (this.autoColorRange) {
       const minMax = this.grid.valueRange;
       this.colorScale.setMinMax(minMax[0], minMax[1]);
@@ -156,27 +123,8 @@ export default class Windy {
     if (!this.grid) {
       return null;
     }
-    const i = this.floorMod(λ - this.λ0, 360) / this.Δλ; // calculate longitude index in wrapped range [0, 360)
-    const j = (this.φ0 - φ) / this.Δφ; // calculate latitude index in direction +90 to -90
-
-    const fi = Math.floor(i);
-    const ci = fi + 1;
-    const fj = Math.floor(j);
-    const cj = fj + 1;
-    let row = this.grid[fj]; //Dont know why he dosent found any row ERRRROR
-    if (row) {
-      const g00 = row[fi];
-      const g10 = row[ci];
-      if (this.isValue(g00) && this.isValue(g10) && (row = this.grid[cj])) {
-        const g01 = row[fi];
-        const g11 = row[ci];
-        if (this.isValue(g01) && this.isValue(g11)) {
-          // All four points found, so interpolate the value.
-          return this.bilinearInterpolateVector(i - fi, j - fj, g00, g10, g01, g11);
-        }
-      }
-    }
-    return null;
+    const wind = this.grid.get(λ, φ);
+    return [wind.u, wind.v, wind.intensity];
   }
 
   public start(layer: Layer) {
@@ -205,33 +153,6 @@ export default class Windy {
       clearTimeout(this.animationLoop);
       this.animationLoop = null;
     }
-  }
-
-  private floorMod(a: number, n: number) {
-    return a - n * Math.floor(a / n);
-  }
-
-  private isValue(x: unknown) {
-    return x !== null && x !== undefined;
-  }
-
-  private bilinearInterpolateVector(
-    x: number,
-    y: number,
-    g00: { u: number; v: number },
-    g10: { u: number; v: number },
-    g01: { u: number; v: number },
-    g11: { u: number; v: number },
-  ): [number, number, number] {
-    const rx = 1 - x;
-    const ry = 1 - y;
-    const a = rx * ry;
-    const b = x * ry;
-    const c = rx * y;
-    const d = x * y;
-    const u = g00.u * a + g10.u * b + g01.u * c + g11.u * d;
-    const v = g00.v * a + g10.v * b + g01.v * c + g11.v * d;
-    return [u, v, Math.sqrt(u * u + v * v)];
   }
 
   private getParticuleWind(p: Particule): Vector {
