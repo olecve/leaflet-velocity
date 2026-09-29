@@ -1,7 +1,13 @@
 # @olecve/leaflet-velocity
 
-This is a typescript updated version of [leaflet-velocity](https://github.com/danwild/leaflet-velocity), forked from
-[leaflet-velocity-ts](https://github.com/0nza1101/leaflet-velocity-ts).
+[![npm version](https://img.shields.io/npm/v/@olecve/leaflet-velocity.svg)](https://www.npmjs.com/package/@olecve/leaflet-velocity)
+[![CI](https://github.com/olecve/leaflet-velocity/actions/workflows/ci.yml/badge.svg)](https://github.com/olecve/leaflet-velocity/actions/workflows/ci.yml)
+
+A Leaflet plugin that animates gridded wind data (U/V vector components, e.g. from a GFS forecast) as a moving field of
+particles over the map, with an optional hover control showing speed and direction at the cursor.
+
+Forked from [leaflet-velocity-ts](https://github.com/0nza1101/leaflet-velocity-ts), itself a TypeScript port of the
+original [leaflet-velocity](https://github.com/danwild/leaflet-velocity).
 
 [Live demo](https://olecve.github.io/leaflet-velocity/)
 
@@ -10,11 +16,11 @@ This is a typescript updated version of [leaflet-velocity](https://github.com/da
 - Compatible with the latest version of leaflet.
 - Better particle management when zooming and moving the map, for better performance on mobile devices.
 - Extends the Leaflet module you `import`, not a global `window.L`. The original plugin (and earlier versions of this
-  fork) assumed a single global `L`, set by loading `leaflet.js` via a `<script>` tag before this plugin's own script —
-  an assumption that breaks under a bundler, where more than one copy of Leaflet can exist on the same page.
-- Real ESM + generated TypeScript declarations (`tsc`, `declaration: true`) — the original never shipped working types
+  fork) assumed a single global `L`, set by loading `leaflet.js` via a `<script>` tag before this plugin's own script.
+  That assumption breaks under a bundler, where more than one copy of Leaflet can exist on the same page.
+- Real ESM + generated TypeScript declarations (`tsc`, `declaration: true`). The original never shipped working types
   for consumers.
-- The control's stylesheet (`src/leaflet/leaflet-velocity.css`) is no longer auto-injected — import it explicitly (see
+- The control's stylesheet (`src/leaflet/leaflet-velocity.css`) is no longer auto-injected. Import it explicitly (see
   below).
 
 ## Example use:
