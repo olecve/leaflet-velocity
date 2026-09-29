@@ -2,6 +2,7 @@ import L from 'leaflet';
 
 import Windy from '../core/windy.js';
 import { VelocityDisplayOptions } from '../types.js';
+import { degreesToCardinalDirection } from './degreesToCardinalDirection.js';
 
 // Ship src/leaflet/leaflet-velocity.css as a plain stylesheet for consumers to import themselves.
 const LEAFLET_VELOCITY_CONTROL_CLASS = 'leaflet-velocity-control';
@@ -91,52 +92,13 @@ export default class ControlVelocity {
     return meters * 2.23694;
   }
 
-  degreesToCardinalDirection(deg: number) {
-    let cardinalDirection = '';
-    if ((deg >= 0 && deg < 11.25) || deg >= 348.75) {
-      cardinalDirection = 'N';
-    } else if (deg >= 11.25 && deg < 33.75) {
-      cardinalDirection = 'NNW';
-    } else if (deg >= 33.75 && deg < 56.25) {
-      cardinalDirection = 'NW';
-    } else if (deg >= 56.25 && deg < 78.75) {
-      cardinalDirection = 'WNW';
-    } else if (deg >= 78.75 && deg < 101.25) {
-      cardinalDirection = 'W';
-    } else if (deg >= 101.25 && deg < 123.75) {
-      cardinalDirection = 'WSW';
-    } else if (deg >= 123.75 && deg < 146.25) {
-      cardinalDirection = 'SW';
-    } else if (deg >= 146.25 && deg < 168.75) {
-      cardinalDirection = 'SSW';
-    } else if (deg >= 168.75 && deg < 191.25) {
-      cardinalDirection = 'S';
-    } else if (deg >= 191.25 && deg < 213.75) {
-      cardinalDirection = 'SSE';
-    } else if (deg >= 213.75 && deg < 236.25) {
-      cardinalDirection = 'SE';
-    } else if (deg >= 236.25 && deg < 258.75) {
-      cardinalDirection = 'ESE';
-    } else if (deg >= 258.75 && deg < 281.25) {
-      cardinalDirection = 'E';
-    } else if (deg >= 281.25 && deg < 303.75) {
-      cardinalDirection = 'ENE';
-    } else if (deg >= 303.75 && deg < 326.25) {
-      cardinalDirection = 'NE';
-    } else if (deg >= 326.25 && deg < 348.75) {
-      cardinalDirection = 'NNE';
-    }
-
-    return cardinalDirection;
-  }
-
   drawWindSpeed(ev: L.LeafletMouseEvent) {
     const pos = this._map.containerPointToLatLng(L.point(ev.containerPoint.x, ev.containerPoint.y));
     const gridValue = this._windy.interpolate(pos.lng, pos.lat);
     let template = '';
     if (gridValue && !isNaN(gridValue[0]) && !isNaN(gridValue[1]) && gridValue[2]) {
       const deg = this.vectorToDegrees(gridValue[0], gridValue[1], this.options.angleConvention);
-      const cardinal = this.options.showCardinal ? ` (${this.degreesToCardinalDirection(deg)}) ` : '';
+      const cardinal = this.options.showCardinal ? ` (${degreesToCardinalDirection(deg)}) ` : '';
       template = `<strong> ${this.options.velocityType} ${
         this.options.directionString
       }: </strong> ${deg.toFixed(2)}°${cardinal}, <strong> ${this.options.velocityType} ${

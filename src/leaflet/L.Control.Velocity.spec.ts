@@ -60,36 +60,3 @@ describe('ControlVelocity.vectorToSpeed', () => {
     expect(control.vectorToSpeed(0, 0, 'kt')).toBe(0);
   });
 });
-
-describe('ControlVelocity.degreesToCardinalDirection', () => {
-  it('maps 0 degrees to N', () => {
-    const control = new ControlVelocity();
-
-    expect(control.degreesToCardinalDirection(0)).toBe('N');
-  });
-
-  it('maps a value just under the 348.75 wraparound back to N', () => {
-    const control = new ControlVelocity();
-
-    expect(control.degreesToCardinalDirection(359)).toBe('N');
-  });
-
-  it('maps 180 degrees to S', () => {
-    const control = new ControlVelocity();
-
-    expect(control.degreesToCardinalDirection(180)).toBe('S');
-  });
-
-  it('returns an empty string for out-of-range input (e.g. negative degrees)', () => {
-    const control = new ControlVelocity();
-
-    expect(control.degreesToCardinalDirection(-10)).toBe('');
-  });
-
-  it('maps the WNW/W boundary at 78.75 degrees to W, not WNW', () => {
-    const control = new ControlVelocity();
-
-    expect(control.degreesToCardinalDirection(78.75)).toBe('W');
-    expect(control.degreesToCardinalDirection(78.5)).toBe('WNW');
-  });
-});
