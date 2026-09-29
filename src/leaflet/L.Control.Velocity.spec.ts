@@ -85,4 +85,11 @@ describe('ControlVelocity.degreesToCardinalDirection', () => {
 
     expect(control.degreesToCardinalDirection(-10)).toBe('');
   });
+
+  it('maps the WNW/W boundary at 78.75 degrees to W, not WNW', () => {
+    const control = new ControlVelocity();
+
+    expect(control.degreesToCardinalDirection(78.75)).toBe('W');
+    expect(control.degreesToCardinalDirection(78.5)).toBe('WNW');
+  });
 });

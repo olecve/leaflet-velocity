@@ -101,7 +101,7 @@ export default class ControlVelocity {
       cardinalDirection = 'NW';
     } else if (deg >= 56.25 && deg < 78.75) {
       cardinalDirection = 'WNW';
-    } else if (deg >= 78.25 && deg < 101.25) {
+    } else if (deg >= 78.75 && deg < 101.25) {
       cardinalDirection = 'W';
     } else if (deg >= 101.25 && deg < 123.75) {
       cardinalDirection = 'WSW';
