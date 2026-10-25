@@ -18,7 +18,7 @@ import {
 export { CanvasBound, MapBound, Windy };
 export type { Position, SpeedUnit, VelocityDisplayOptions, VelocityOptions, WindDataHeader, WindDataRecord };
 
-/** What {@link velocityLayer} actually returns, so callers can call its update methods without casting. */
+/** This is what {@link velocityLayer} returns. Callers can call its update methods without a cast. */
 export type VelocityLayerHandle = L.Layer & Pick<VelocityLayer, 'setData' | 'setOptions' | 'updateData'>;
 
 // Extends the imported L, not window.L — see README. The .extend() mixin pattern is inherently untypeable, hence the casts.

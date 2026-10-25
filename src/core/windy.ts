@@ -135,8 +135,7 @@ export default class Windy {
   }
 
   /**
-   * Starts the particle animation loop. Safe to call again while already running — cancels the
-   * previous loop first.
+   * Starts the particle animation loop. If a loop is already running, this method stops it first.
    * @param layer
    */
   public start(layer: Layer) {

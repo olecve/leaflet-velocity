@@ -125,8 +125,21 @@ describe('VelocityLayer.updateData', () => {
 
     layer.updateData([], { minVelocity: 0, maxVelocity: 5 });
 
-    expect(windy.setOptions).toHaveBeenCalledWith({ minVelocity: 0, maxVelocity: 5 });
+    expect(windy.setOptions).toHaveBeenCalledWith(expect.objectContaining({ minVelocity: 0, maxVelocity: 5 }));
     expect(windy.start).not.toHaveBeenCalled();
+  });
+
+  it('preserves previously-set simulation options across a partial update', () => {
+    const layer = new VelocityLayer();
+    layer.fire = vi.fn();
+    const windy = stubbedWindy();
+    Object.assign(layer, { _windy: windy, options: { velocityScale: 0.003 } });
+
+    layer.updateData([], { minVelocity: 0, maxVelocity: 5 });
+
+    expect(windy.setOptions).toHaveBeenCalledWith(
+      expect.objectContaining({ velocityScale: 0.003, minVelocity: 0, maxVelocity: 5 }),
+    );
   });
 
   it('does nothing to windy when the layer has not been added to a map yet', () => {

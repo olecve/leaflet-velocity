@@ -84,24 +84,24 @@ velocityLayer.addTo(mymap);
 
 ## Updating data
 
-Once a layer is on the map, there are three ways to push new data into it:
+A layer on the map has three ways to take new data.
 
-| Method                       | Canvas / particles                | Use for                                             |
-| ---------------------------- | --------------------------------- | --------------------------------------------------- |
-| `setData(data)`              | Cleared; particles reseeded       | A one-off change — a different dataset or region    |
-| `setOptions(options)`        | Cleared; particles reseeded       | A one-off change to any option, `data` included     |
-| `updateData(data, options?)` | Untouched; particles keep flowing | Playback through a time series, one frame at a time |
+| Method                       | Canvas and particles                   | Use for                                               |
+| ---------------------------- | -------------------------------------- | ----------------------------------------------------- |
+| `setData(data)`              | Clears canvas and resets particles     | A one-off change, for example a new dataset or region |
+| `setOptions(options)`        | Clears canvas and resets particles     | A one-off change to any option, including `data`      |
+| `updateData(data, options?)` | Keeps canvas and particles as they are | Playback through a time series, one frame at a time   |
 
 ```javascript
-// One-off change — visible reset
+// A one-off change: this resets the view
 velocityLayer.setData(newData);
 
-// Playback through a time series — smooth, no flash
+// Playback: no flash
 velocityLayer.updateData(nextFrameData, { minVelocity, maxVelocity });
 ```
 
-`demo/main.ts` has a side-by-side comparison: two buttons simulate playback via each method, with a live counter of how
-many times the canvas actually got cleared.
+`demo/main.ts` has a side-by-side comparison. Two buttons simulate playback, one for each method. A live counter shows
+how many times the canvas actually cleared.
 
 ## License
 
