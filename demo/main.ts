@@ -3,6 +3,8 @@ import '../src/leaflet/leaflet-velocity.css';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+import type { VelocityOptions } from '../dist/index.js';
+
 import data from './data.js';
 
 // Centered on the strongest wind in this dataset (~35 m/s near 20°N 164°W) so the animation is obvious immediately.
@@ -103,3 +105,33 @@ updateDataButton.addEventListener('click', () => {
   if (activeMethod === 'updateData') stopPlayback();
   else startPlayback('updateData');
 });
+
+// Presets: setOptions() calls, each changing particle density, speed, trail length, or color.
+// colorScale: [] falls back to the library's built-in palette (see ColorScale's constructor).
+type PresetName = 'default' | 'dense-slow' | 'sparse-fast' | 'long-trails' | 'blue-palette';
+
+const presets: Record<PresetName, Partial<VelocityOptions>> = {
+  default: { particleMultiplier: 1 / 300, velocityScale: 0.01, particleAge: 64, opacity: 0.97, colorScale: [] },
+  'dense-slow': { particleMultiplier: 0.01, velocityScale: 0.002, particleAge: 64, opacity: 0.97, colorScale: [] },
+  'sparse-fast': { particleMultiplier: 0.001, velocityScale: 0.02, particleAge: 64, opacity: 0.97, colorScale: [] },
+  'long-trails': { particleMultiplier: 1 / 300, velocityScale: 0.01, particleAge: 160, opacity: 0.99, colorScale: [] },
+  'blue-palette': {
+    particleMultiplier: 1 / 300,
+    velocityScale: 0.01,
+    particleAge: 64,
+    opacity: 0.97,
+    colorScale: ['rgb(202, 221, 236)', 'rgb(150, 180, 230)', 'rgb(90, 140, 230)', 'rgb(40, 85, 230)'],
+  },
+};
+
+const presetSelect = document.getElementById('preset') as HTMLSelectElement;
+const presetInfo = document.getElementById('preset-info')!;
+
+function applyPreset(name: PresetName) {
+  const preset = presets[name];
+  velocity.setOptions(preset);
+  presetInfo.textContent = `particleMultiplier: ${preset.particleMultiplier} · velocityScale: ${preset.velocityScale} · particleAge: ${preset.particleAge} · opacity: ${preset.opacity}`;
+}
+
+presetSelect.addEventListener('change', () => applyPreset(presetSelect.value as PresetName));
+applyPreset('default');
