@@ -18,9 +18,7 @@ import {
 export { CanvasBound, MapBound, Windy };
 export type { Position, SpeedUnit, VelocityDisplayOptions, VelocityOptions, WindDataHeader, WindDataRecord };
 
-// What L.velocityLayer(...) actually returns: a Leaflet Layer mixed with VelocityLayer's public
-// update methods, so callers can push new data into the existing layer (see setData/setOptions)
-// instead of tearing it down and building a new one on every frame.
+/** What {@link velocityLayer} actually returns, so callers can call its update methods without casting. */
 export type VelocityLayerHandle = L.Layer & Pick<VelocityLayer, 'setData' | 'setOptions' | 'updateData'>;
 
 // Extends the imported L, not window.L — see README. The .extend() mixin pattern is inherently untypeable, hence the casts.

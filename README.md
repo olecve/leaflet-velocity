@@ -82,6 +82,27 @@ const velocityLayer = L.velocityLayer({
 velocityLayer.addTo(mymap);
 ```
 
+## Updating data
+
+Once a layer is on the map, there are three ways to push new data into it:
+
+| Method                       | Canvas / particles                | Use for                                             |
+| ---------------------------- | --------------------------------- | --------------------------------------------------- |
+| `setData(data)`              | Cleared; particles reseeded       | A one-off change — a different dataset or region    |
+| `setOptions(options)`        | Cleared; particles reseeded       | A one-off change to any option, `data` included     |
+| `updateData(data, options?)` | Untouched; particles keep flowing | Playback through a time series, one frame at a time |
+
+```javascript
+// One-off change — visible reset
+velocityLayer.setData(newData);
+
+// Playback through a time series — smooth, no flash
+velocityLayer.updateData(nextFrameData, { minVelocity, maxVelocity });
+```
+
+`demo/main.ts` has a side-by-side comparison: two buttons simulate playback via each method, with a live counter of how
+many times the canvas actually got cleared.
+
 ## License
 
 MIT License (MIT)

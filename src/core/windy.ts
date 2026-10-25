@@ -134,10 +134,12 @@ export default class Windy {
     return [wind.u, wind.v, wind.intensity];
   }
 
+  /**
+   * Starts the particle animation loop. Safe to call again while already running — cancels the
+   * previous loop first.
+   * @param layer
+   */
   public start(layer: Layer) {
-    // Guards against leaving a previous frame() chain running: start() is called again on every
-    // data/zoom/drag refresh (see VelocityLayer.clearAndRestart), and without this a second
-    // requestAnimationFrame chain would run forever alongside the new one.
     this.stop();
 
     this.context2D = this.canvas.getContext('2d');
@@ -158,6 +160,7 @@ export default class Windy {
     this.frame();
   }
 
+  /** Stops the particle animation loop and clears its particles. */
   public stop() {
     this.particules.splice(0, this.particules.length);
     if (this.animationBucket) this.animationBucket.clear();

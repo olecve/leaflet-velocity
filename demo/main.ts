@@ -31,9 +31,7 @@ map.addLayer(velocity);
 document.getElementById('remove')!.addEventListener('click', () => map.removeLayer(velocity));
 document.getElementById('add')!.addEventListener('click', () => map.addLayer(velocity));
 
-// --- Playback comparison: setData() (hard reset) vs updateData() (smooth) ---
-// A second synthetic frame with u/v swapped (so the flow direction visibly rotates), to stand in
-// for "the next timestep" the way viz-map's playback feeds in a new frame every tick.
+// Playback comparison: setData() (hard reset) vs updateData() (smooth); dataB swaps u/v to simulate the next frame.
 const [uRecord, vRecord] = data;
 const dataB = [
   { header: uRecord.header, data: vRecord.data },

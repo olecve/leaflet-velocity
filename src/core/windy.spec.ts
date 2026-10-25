@@ -120,8 +120,7 @@ describe('Windy', () => {
   });
 
   it('start() cancels a previous run instead of leaving two animation-frame chains scheduled', () => {
-    // Mirrors VelocityLayer.clearAndRestart(), which calls start() again on every data/zoom/drag
-    // refresh without calling stop() first.
+    // Mirrors VelocityLayer.clearAndRestart(), which calls start() again without calling stop() first.
     let nextId = 1;
     const scheduled: number[] = [];
     const cancelled: number[] = [];

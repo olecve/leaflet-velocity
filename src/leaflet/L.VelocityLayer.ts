@@ -10,7 +10,7 @@ import { VelocityOptions, WindDataRecord } from '../types.js';
 type VelocityLayerMapEvents = Record<'dragstart' | 'dragend' | 'zoomstart' | 'zoomend' | 'resize', () => void>;
 
 export default class VelocityLayer {
-  // Provided by Leaflet's Evented mixin once .extend() merges this class in (see index.ts) — not implemented here.
+  /** Provided by Leaflet's Evented mixin once .extend() merges this class in (see index.ts) — not implemented here. */
   declare fire: (type: string, data?: unknown, propagate?: boolean) => this;
 
   private options: Partial<VelocityOptions>;
@@ -46,6 +46,12 @@ export default class VelocityLayer {
     L.Util.setOptions(this, options);
   }
 
+  /**
+   * Replaces the layer's options and restarts the simulation — clears the canvas and reseeds
+   * every particle. For pushing a new frame during playback without the visible reset, use
+   * {@link updateData} instead.
+   * @param options
+   */
   setOptions(options: Partial<VelocityOptions>) {
     this.options = { ...this.options, ...options };
     if (options.displayOptions) {
@@ -91,6 +97,12 @@ export default class VelocityLayer {
     if (this.options.onRemove) this.options.onRemove();
   }
 
+  /**
+   * Replaces the layer's data and restarts the simulation — clears the canvas and reseeds every
+   * particle. For pushing a new frame during playback without the visible reset, use
+   * {@link updateData} instead.
+   * @param data
+   */
   setData(data: WindDataRecord[]) {
     this.options.data = data;
 
@@ -102,11 +114,13 @@ export default class VelocityLayer {
     this.fire('load');
   }
 
-  // Swaps in new data without clearAndRestart()'s canvas clear + particle reset, so already
-  // flowing particles keep moving (now steered by the new field) instead of the animation
-  // visibly blanking out and restarting from scratch. Meant for time-series playback, where each
-  // frame covers the same region as the last; use setData()/setOptions() instead when the change
-  // should look like a hard reset (e.g. jumping to an unrelated dataset or region).
+  /**
+   * Pushes new data into the already-running simulation, without clearing the canvas or
+   * resetting particles. Use this for playback through a time series; use {@link setData} /
+   * {@link setOptions} when a visible reset is wanted instead.
+   * @param data
+   * @param options Non-data options to update alongside the data (e.g. minVelocity/maxVelocity).
+   */
   updateData(data: WindDataRecord[], options?: Partial<Omit<VelocityOptions, 'data'>>) {
     this.options.data = data;
     if (options) this.options = { ...this.options, ...options };

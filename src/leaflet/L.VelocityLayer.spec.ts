@@ -88,9 +88,7 @@ describe('VelocityLayer canvas clearing', () => {
   });
 });
 
-// updateData() exists specifically so time-series playback can push each frame's data into the
-// running simulation without the visible blank-then-restart flash that setData() causes via
-// clearAndRestart() (canvas clearRect + fresh randomized particles + a new start() call).
+// Regression coverage for the blank-then-restart flash that setData()'s clearAndRestart() causes.
 describe('VelocityLayer.updateData', () => {
   function stubbedWindy() {
     return {
