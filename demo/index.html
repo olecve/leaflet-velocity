@@ -7,17 +7,54 @@
   </head>
 
   <body>
+    <header>
+      <h1>@olecve/leaflet-velocity</h1>
+      <p class="subtitle">Interactive demo of a Leaflet plugin that animates gridded wind data.</p>
+    </header>
+
     <div id="mapid"></div>
-    <button id="remove">Remove Wind</button>
-    <button id="add">Add Wind</button>
-    <hr />
-    <p>
-      Simulates playback through a time series (alternates between two synthetic frames once a second) to compare the
-      two ways of pushing new data into a running layer.
-    </p>
-    <button id="play-set-data">Play via setData() (hard reset)</button>
-    <button id="play-update-data">Play via updateData() (smooth)</button>
-    <p id="stats">frames: 0 · canvas clears: 0</p>
+
+    <main>
+      <section class="panel">
+        <h2>Presets</h2>
+        <p>
+          Each preset calls <code>setOptions()</code> with a different particle density, speed, trail length, and color.
+        </p>
+        <div class="controls">
+          <label for="preset">Preset</label>
+          <select id="preset">
+            <option value="default">Default</option>
+            <option value="dense-slow">Dense, slow</option>
+            <option value="sparse-fast">Sparse, fast</option>
+            <option value="long-trails">Long trails</option>
+            <option value="blue-palette">Blue palette</option>
+          </select>
+        </div>
+        <p id="preset-info" class="readout"></p>
+      </section>
+
+      <section class="panel">
+        <h2>Layer visibility</h2>
+        <div class="controls">
+          <button id="remove">Remove Wind</button>
+          <button id="add">Add Wind</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Playback comparison</h2>
+        <p>
+          Simulates playback through a time series (alternates between two synthetic frames once a second) to compare
+          the two ways of pushing new data into a running layer.
+        </p>
+        <div class="controls">
+          <button id="play-set-data">Play via setData() (hard reset)</button>
+          <button id="play-update-data">Play via updateData() (smooth)</button>
+        </div>
+        <p id="stats" class="readout">frames: 0 · canvas clears: 0</p>
+      </section>
+    </main>
+
     <script type="module" src="main.ts"></script>
   </body>
 </html>

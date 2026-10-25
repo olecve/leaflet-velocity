@@ -97,11 +97,36 @@ A layer on the map has three ways to take new data.
 velocityLayer.setData(newData);
 
 // Playback: no flash
-velocityLayer.updateData(nextFrameData, { minVelocity, maxVelocity });
+velocityLayer.updateData(nextFrameData, { velocityScale });
 ```
 
 `demo/main.ts` has a side-by-side comparison. Two buttons simulate playback, one for each method. A live counter shows
 how many times the canvas actually cleared.
+
+### Which options `updateData()` applies right away
+
+`setOptions()` always restarts the simulation, so every option takes effect immediately through it. `updateData()` never
+restarts. Only the options read on every animation frame change the picture right away. The rest are stored correctly,
+so they are not lost, but they only show up at the next restart: a `setOptions()` call, or the map being zoomed, panned,
+or resized.
+
+| Option               | Takes effect right away via `updateData()`                       |
+| -------------------- | ---------------------------------------------------------------- |
+| `data`               | Yes                                                              |
+| `velocityScale`      | Yes                                                              |
+| `opacity`            | Yes                                                              |
+| `frameRate`          | Yes                                                              |
+| `minVelocity`        | No, only at the next restart (rebuilds the color scale)          |
+| `maxVelocity`        | No, only at the next restart (rebuilds the color scale)          |
+| `colorScale`         | No, only at the next restart                                     |
+| `particleAge`        | No, only at the next restart (new particles only)                |
+| `particleMultiplier` | No, only at the next restart (changes particle count)            |
+| `particleLineWidth`  | No, only at the next restart                                     |
+| `displayValues`      | No, `setOptions()` only, and only together with `displayOptions` |
+| `displayOptions`     | No, `setOptions()` only                                          |
+| `onAdd`              | No, only read when the layer is added to the map                 |
+| `onRemove`           | No, only read when the layer is removed from the map             |
+| `paneName`           | No, only read when the layer is added to the map                 |
 
 ## License
 
