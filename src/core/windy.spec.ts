@@ -105,18 +105,18 @@ describe('Windy', () => {
   });
 
   it('stop() cancels the animation frame scheduled by start(), not some other timer', () => {
-    const rafSpy = vi.spyOn(globalThis, 'requestAnimationFrame').mockReturnValue(123);
-    const cafSpy = vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation(() => {});
+    const requestAnimationFrameSpy = vi.spyOn(globalThis, 'requestAnimationFrame').mockReturnValue(123);
+    const cancelAnimationFrameSpy = vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation(() => {});
 
     const windy = createWindy();
     windy.setData(uAndVComponents());
     windy.start(makeLayer());
     windy.stop();
 
-    expect(cafSpy).toHaveBeenCalledWith(123);
+    expect(cancelAnimationFrameSpy).toHaveBeenCalledWith(123);
 
-    rafSpy.mockRestore();
-    cafSpy.mockRestore();
+    requestAnimationFrameSpy.mockRestore();
+    cancelAnimationFrameSpy.mockRestore();
   });
 
   it('start() cancels a previous run instead of leaving two animation-frame chains scheduled', () => {

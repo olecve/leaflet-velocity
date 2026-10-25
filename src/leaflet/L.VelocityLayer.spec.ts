@@ -3,6 +3,13 @@ import L from 'leaflet';
 
 import VelocityLayer from './L.VelocityLayer';
 
+// The one place that reaches past VelocityLayer's privacy, so tests can call its private methods
+// without an `as unknown as {...}` cast at every call site. Field access doesn't need this —
+// Object.assign(layer, { _field: value }) sets a private field without a cast at all.
+function callPrivateMethod(layer: VelocityLayer, method: 'clearAndRestart' | 'clearWind' | 'destroyWind') {
+  (layer as unknown as Record<typeof method, () => void>)[method]();
+}
+
 // Guards createPane()'s side effect after removing the dead `pane` variable that used to hold its result.
 describe('VelocityLayer.onAdd pane creation', () => {
   function stubCanvasLayer() {
@@ -55,9 +62,9 @@ describe('VelocityLayer canvas clearing', () => {
   it('clearAndRestart() clears the full actual canvas size, not a hardcoded 3000x3000', () => {
     const layer = new VelocityLayer();
     const context = realContext(4000, 3500);
-    (layer as unknown as { _context: CanvasRenderingContext2D })._context = context;
+    Object.assign(layer, { _context: context });
 
-    (layer as unknown as { clearAndRestart: () => void }).clearAndRestart();
+    callPrivateMethod(layer, 'clearAndRestart');
 
     expect(context.clearRect).toHaveBeenCalledWith(0, 0, 4000, 3500);
   });
@@ -65,9 +72,9 @@ describe('VelocityLayer canvas clearing', () => {
   it('clearWind() clears the full actual canvas size, not a hardcoded 3000x3000', () => {
     const layer = new VelocityLayer();
     const context = realContext(4000, 3500);
-    (layer as unknown as { _context: CanvasRenderingContext2D })._context = context;
+    Object.assign(layer, { _context: context });
 
-    (layer as unknown as { clearWind: () => void }).clearWind();
+    callPrivateMethod(layer, 'clearWind');
 
     expect(context.clearRect).toHaveBeenCalledWith(0, 0, 4000, 3500);
   });
@@ -75,14 +82,10 @@ describe('VelocityLayer canvas clearing', () => {
   it('destroyWind() clears the full actual canvas size, not a hardcoded 3000x3000', () => {
     const layer = new VelocityLayer();
     const context = realContext(4000, 3500);
-    (layer as unknown as { _context: CanvasRenderingContext2D })._context = context;
-    (layer as unknown as { _map: L.Map })._map = {
-      removeLayer: vi.fn(),
-      on: vi.fn(),
-      off: vi.fn(),
-    } as unknown as L.Map;
+    const fakeMap = { removeLayer: vi.fn(), on: vi.fn(), off: vi.fn() } as unknown as L.Map;
+    Object.assign(layer, { _context: context, _map: fakeMap });
 
-    (layer as unknown as { destroyWind: () => void }).destroyWind();
+    callPrivateMethod(layer, 'destroyWind');
 
     expect(context.clearRect).toHaveBeenCalledWith(0, 0, 4000, 3500);
   });
@@ -104,8 +107,7 @@ describe('VelocityLayer.updateData', () => {
     layer.fire = vi.fn();
     const windy = stubbedWindy();
     const context = { clearRect: vi.fn() } as unknown as CanvasRenderingContext2D;
-    (layer as unknown as { _windy: unknown })._windy = windy;
-    (layer as unknown as { _context: CanvasRenderingContext2D })._context = context;
+    Object.assign(layer, { _windy: windy, _context: context });
 
     const data = [{ header: { parameterCategory: 1, parameterNumber: 2 }, data: [1, 2] }] as never;
     layer.updateData(data);
@@ -119,7 +121,7 @@ describe('VelocityLayer.updateData', () => {
     const layer = new VelocityLayer();
     layer.fire = vi.fn();
     const windy = stubbedWindy();
-    (layer as unknown as { _windy: unknown })._windy = windy;
+    Object.assign(layer, { _windy: windy });
 
     layer.updateData([], { minVelocity: 0, maxVelocity: 5 });
 
