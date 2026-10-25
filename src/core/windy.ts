@@ -134,7 +134,13 @@ export default class Windy {
     return [wind.u, wind.v, wind.intensity];
   }
 
+  /**
+   * Starts the particle animation loop. If a loop is already running, this method stops it first.
+   * @param layer
+   */
   public start(layer: Layer) {
+    this.stop();
+
     this.context2D = this.canvas.getContext('2d');
     this.context2D.lineWidth = this.particleLineWidth;
     this.context2D.fillStyle = `rgba(0, 0, 0, ${this.opacity})`;
@@ -153,11 +159,12 @@ export default class Windy {
     this.frame();
   }
 
+  /** Stops the particle animation loop and clears its particles. */
   public stop() {
     this.particules.splice(0, this.particules.length);
     if (this.animationBucket) this.animationBucket.clear();
     if (this.animationLoop) {
-      clearTimeout(this.animationLoop);
+      cancelAnimationFrame(this.animationLoop);
       this.animationLoop = null;
     }
   }
