@@ -130,7 +130,13 @@ const presetInfo = document.getElementById('preset-info')!;
 function applyPreset(name: PresetName) {
   const preset = presets[name];
   velocity.setOptions(preset);
-  presetInfo.textContent = `particleMultiplier: ${preset.particleMultiplier} · velocityScale: ${preset.velocityScale} · particleAge: ${preset.particleAge} · opacity: ${preset.opacity}`;
+  const multiplier = preset.particleMultiplier!.toFixed(4);
+  presetInfo.textContent = [
+    `particleMultiplier: ${multiplier}`,
+    `velocityScale: ${preset.velocityScale}`,
+    `particleAge: ${preset.particleAge}`,
+    `opacity: ${preset.opacity}`,
+  ].join('\n');
 }
 
 presetSelect.addEventListener('change', () => applyPreset(presetSelect.value as PresetName));
