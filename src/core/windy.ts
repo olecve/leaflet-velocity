@@ -135,6 +135,11 @@ export default class Windy {
   }
 
   public start(layer: Layer) {
+    // Guards against leaving a previous frame() chain running: start() is called again on every
+    // data/zoom/drag refresh (see VelocityLayer.clearAndRestart), and without this a second
+    // requestAnimationFrame chain would run forever alongside the new one.
+    this.stop();
+
     this.context2D = this.canvas.getContext('2d');
     this.context2D.lineWidth = this.particleLineWidth;
     this.context2D.fillStyle = `rgba(0, 0, 0, ${this.opacity})`;
@@ -157,7 +162,7 @@ export default class Windy {
     this.particules.splice(0, this.particules.length);
     if (this.animationBucket) this.animationBucket.clear();
     if (this.animationLoop) {
-      clearTimeout(this.animationLoop);
+      cancelAnimationFrame(this.animationLoop);
       this.animationLoop = null;
     }
   }

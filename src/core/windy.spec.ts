@@ -1,11 +1,21 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import CanvasBound from './canvasBound';
+import Layer from './layer';
+import MapBound from './mapBound';
 import Windy from './windy';
 
 function createWindy() {
   return new Windy({
     canvas: document.createElement('canvas'),
   } as any);
+}
+
+// Same construction as layer.spec.ts's makeLayer — just enough for start() to seed particles.
+function makeLayer() {
+  const mapBound = new MapBound(null as never, 10, 10, 0, 0);
+  const canvasBound = new CanvasBound(0, 0, 500, 500);
+  return new Layer(mapBound, canvasBound);
 }
 
 function uComponentOnly(): any {
@@ -92,5 +102,46 @@ describe('Windy', () => {
     windy.setData(uAndVComponents());
 
     expect(windy.interpolate(1000, 1000)).toEqual([0, 0, 0]);
+  });
+
+  it('stop() cancels the animation frame scheduled by start(), not some other timer', () => {
+    const rafSpy = vi.spyOn(globalThis, 'requestAnimationFrame').mockReturnValue(123);
+    const cafSpy = vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation(() => {});
+
+    const windy = createWindy();
+    windy.setData(uAndVComponents());
+    windy.start(makeLayer());
+    windy.stop();
+
+    expect(cafSpy).toHaveBeenCalledWith(123);
+
+    rafSpy.mockRestore();
+    cafSpy.mockRestore();
+  });
+
+  it('start() cancels a previous run instead of leaving two animation-frame chains scheduled', () => {
+    // Mirrors VelocityLayer.clearAndRestart(), which calls start() again on every data/zoom/drag
+    // refresh without calling stop() first.
+    let nextId = 1;
+    const scheduled: number[] = [];
+    const cancelled: number[] = [];
+    vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation(() => {
+      const id = nextId++;
+      scheduled.push(id);
+      return id;
+    });
+    vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation((id: number) => {
+      cancelled.push(id);
+    });
+
+    const windy = createWindy();
+    windy.setData(uAndVComponents());
+    windy.start(makeLayer());
+    windy.start(makeLayer());
+
+    expect(scheduled).toEqual([1, 2]);
+    expect(cancelled).toEqual([1]);
+
+    vi.restoreAllMocks();
   });
 });
