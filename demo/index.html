@@ -10,6 +10,14 @@
     <div id="mapid"></div>
     <button id="remove">Remove Wind</button>
     <button id="add">Add Wind</button>
+    <hr />
+    <p>
+      Simulates playback through a time series (alternates between two synthetic frames once a second) to compare the
+      two ways of pushing new data into a running layer.
+    </p>
+    <button id="play-set-data">Play via setData() (hard reset)</button>
+    <button id="play-update-data">Play via updateData() (smooth)</button>
+    <p id="stats">frames: 0 · canvas clears: 0</p>
     <script type="module" src="main.ts"></script>
   </body>
 </html>

@@ -102,6 +102,23 @@ export default class VelocityLayer {
     this.fire('load');
   }
 
+  // Swaps in new data without clearAndRestart()'s canvas clear + particle reset, so already
+  // flowing particles keep moving (now steered by the new field) instead of the animation
+  // visibly blanking out and restarting from scratch. Meant for time-series playback, where each
+  // frame covers the same region as the last; use setData()/setOptions() instead when the change
+  // should look like a hard reset (e.g. jumping to an unrelated dataset or region).
+  updateData(data: WindDataRecord[], options?: Partial<Omit<VelocityOptions, 'data'>>) {
+    this.options.data = data;
+    if (options) this.options = { ...this.options, ...options };
+
+    if (this._windy) {
+      if (options) this._windy.setOptions(options);
+      this._windy.setData(data);
+    }
+
+    this.fire('load');
+  }
+
   onDrawLayer() {
     if (!this._windy) {
       this.initWindy();

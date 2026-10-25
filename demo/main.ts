@@ -30,3 +30,78 @@ map.addLayer(velocity);
 
 document.getElementById('remove')!.addEventListener('click', () => map.removeLayer(velocity));
 document.getElementById('add')!.addEventListener('click', () => map.addLayer(velocity));
+
+// --- Playback comparison: setData() (hard reset) vs updateData() (smooth) ---
+// A second synthetic frame with u/v swapped (so the flow direction visibly rotates), to stand in
+// for "the next timestep" the way viz-map's playback feeds in a new frame every tick.
+const [uRecord, vRecord] = data;
+const dataB = [
+  { header: uRecord.header, data: vRecord.data },
+  { header: vRecord.header, data: uRecord.data },
+];
+
+const statsEl = document.getElementById('stats')!;
+const setDataButton = document.getElementById('play-set-data')!;
+const updateDataButton = document.getElementById('play-update-data')!;
+
+let intervalId: ReturnType<typeof setInterval> | null = null;
+let activeMethod: 'setData' | 'updateData' | null = null;
+let onFrameB = false;
+let frameCount = 0;
+let clearCount = 0;
+
+function instrumentCanvasClearRect() {
+  const canvas = document.querySelector<HTMLCanvasElement>('canvas.velocity-overlay');
+  const ctx = canvas?.getContext('2d') as (CanvasRenderingContext2D & { __instrumented?: boolean }) | null;
+  if (!ctx || ctx.__instrumented) return;
+  ctx.__instrumented = true;
+  const origClearRect = ctx.clearRect.bind(ctx);
+  ctx.clearRect = (...args: Parameters<typeof origClearRect>) => {
+    clearCount++;
+    renderStats();
+    return origClearRect(...args);
+  };
+}
+
+function renderStats() {
+  const label = activeMethod ? `playing via ${activeMethod}()` : 'stopped';
+  statsEl.textContent = `${label} · frames: ${frameCount} · canvas clears: ${clearCount}`;
+}
+
+function stopPlayback() {
+  if (intervalId) clearInterval(intervalId);
+  intervalId = null;
+  activeMethod = null;
+  setDataButton.textContent = 'Play via setData() (hard reset)';
+  updateDataButton.textContent = 'Play via updateData() (smooth)';
+  renderStats();
+}
+
+function startPlayback(method: 'setData' | 'updateData') {
+  stopPlayback();
+  activeMethod = method;
+  frameCount = 0;
+  clearCount = 0;
+  onFrameB = false;
+  instrumentCanvasClearRect();
+  renderStats();
+
+  const button = method === 'setData' ? setDataButton : updateDataButton;
+  button.textContent = `Stop (${method === 'setData' ? 'hard reset' : 'smooth'})`;
+
+  intervalId = setInterval(() => {
+    onFrameB = !onFrameB;
+    velocity[method](onFrameB ? dataB : data);
+    frameCount++;
+    renderStats();
+  }, 1000);
+}
+
+setDataButton.addEventListener('click', () => {
+  if (activeMethod === 'setData') stopPlayback();
+  else startPlayback('setData');
+});
+updateDataButton.addEventListener('click', () => {
+  if (activeMethod === 'updateData') stopPlayback();
+  else startPlayback('updateData');
+});

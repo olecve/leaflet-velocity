@@ -87,3 +87,52 @@ describe('VelocityLayer canvas clearing', () => {
     expect(context.clearRect).toHaveBeenCalledWith(0, 0, 4000, 3500);
   });
 });
+
+// updateData() exists specifically so time-series playback can push each frame's data into the
+// running simulation without the visible blank-then-restart flash that setData() causes via
+// clearAndRestart() (canvas clearRect + fresh randomized particles + a new start() call).
+describe('VelocityLayer.updateData', () => {
+  function stubbedWindy() {
+    return {
+      setData: vi.fn(),
+      setOptions: vi.fn(),
+      start: vi.fn(),
+      stop: vi.fn(),
+    };
+  }
+
+  it('pushes new data into the running simulation without touching the canvas or restarting it', () => {
+    const layer = new VelocityLayer();
+    layer.fire = vi.fn();
+    const windy = stubbedWindy();
+    const context = { clearRect: vi.fn() } as unknown as CanvasRenderingContext2D;
+    (layer as unknown as { _windy: unknown })._windy = windy;
+    (layer as unknown as { _context: CanvasRenderingContext2D })._context = context;
+
+    const data = [{ header: { parameterCategory: 1, parameterNumber: 2 }, data: [1, 2] }] as never;
+    layer.updateData(data);
+
+    expect(windy.setData).toHaveBeenCalledWith(data);
+    expect(windy.start).not.toHaveBeenCalled();
+    expect(context.clearRect).not.toHaveBeenCalled();
+  });
+
+  it('forwards non-data options to the windy instance without restarting it', () => {
+    const layer = new VelocityLayer();
+    layer.fire = vi.fn();
+    const windy = stubbedWindy();
+    (layer as unknown as { _windy: unknown })._windy = windy;
+
+    layer.updateData([], { minVelocity: 0, maxVelocity: 5 });
+
+    expect(windy.setOptions).toHaveBeenCalledWith({ minVelocity: 0, maxVelocity: 5 });
+    expect(windy.start).not.toHaveBeenCalled();
+  });
+
+  it('does nothing to windy when the layer has not been added to a map yet', () => {
+    const layer = new VelocityLayer();
+    layer.fire = vi.fn();
+
+    expect(() => layer.updateData([])).not.toThrow();
+  });
+});

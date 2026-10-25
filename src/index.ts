@@ -18,6 +18,11 @@ import {
 export { CanvasBound, MapBound, Windy };
 export type { Position, SpeedUnit, VelocityDisplayOptions, VelocityOptions, WindDataHeader, WindDataRecord };
 
+// What L.velocityLayer(...) actually returns: a Leaflet Layer mixed with VelocityLayer's public
+// update methods, so callers can push new data into the existing layer (see setData/setOptions)
+// instead of tearing it down and building a new one on every frame.
+export type VelocityLayerHandle = L.Layer & Pick<VelocityLayer, 'setData' | 'setOptions' | 'updateData'>;
+
 // Extends the imported L, not window.L — see README. The .extend() mixin pattern is inherently untypeable, hence the casts.
 const extendableL = L as unknown as Record<string, unknown>;
 
@@ -35,14 +40,14 @@ extendableL.canvasLayer = function () {
 
 extendableL.VelocityLayer = L.Layer.extend(new VelocityLayer());
 extendableL.velocityLayer = function (options: Partial<VelocityOptions>) {
-  return new (L as unknown as { VelocityLayer: new (options: Partial<VelocityOptions>) => L.Layer }).VelocityLayer(
-    options,
-  );
+  return new (
+    L as unknown as { VelocityLayer: new (options: Partial<VelocityOptions>) => VelocityLayerHandle }
+  ).VelocityLayer(options);
 };
 
 declare module 'leaflet' {
   function canvasLayer(): CanvasLayer & Layer;
-  function velocityLayer(options: Partial<VelocityOptions>): Layer;
+  function velocityLayer(options: Partial<VelocityOptions>): VelocityLayerHandle;
 
   // eslint-disable-next-line @typescript-eslint/no-namespace -- augmenting @types/leaflet's own namespace
   namespace Control {
